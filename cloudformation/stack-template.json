@@ -10,7 +10,7 @@
             "Type": "AWS::Serverless::Api",
             "Properties": {
                 "StageName": "v1",
-                "DefinitionUri": "s3://<bucket>/cloudformation/api-swagger.json"
+                "DefinitionUri": "./api-swagger.json"
             }
         }
     }
