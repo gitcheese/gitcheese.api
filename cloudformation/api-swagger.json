@@ -1,47 +1,27 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "version": "2017-02-11T13:35:50Z",
-    "title": "gitcheese-test"
-  },
-  "host": "pt5uu416rc.execute-api.us-east-1.amazonaws.com",
-  "basePath": "/v1",
-  "schemes": [
-    "https"
-  ],
-  "paths": {
-    "/login": {
-      "get": {
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/Empty"
+    "swagger": "2.0",
+    "info": {
+        "version": "2017-02-11T13:35:50Z",
+        "title": "githceese-api-staging"
+    },
+    "host": "pt5uu416rc.execute-api.us-east-1.amazonaws.com",
+    "basePath": "/v1",
+    "schemes": [
+        "https"
+    ],
+    "paths": {
+        "/login": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {},
+                "x-amazon-apigateway-integration": {
+                    "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.LoginGetFunctionName}/invocations",
+                    "httpMethod": "POST",
+                    "type": "aws_proxy"
+                }
             }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200"
-            }
-          },
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:TestLambda/invocations",
-          "passthroughBehavior": "when_no_match",
-          "httpMethod": "POST",
-          "contentHandling": "CONVERT_TO_TEXT",
-          "type": "aws"
         }
-      }
     }
-  },
-  "definitions": {
-    "Empty": {
-      "type": "object",
-      "title": "Empty Schema"
-    }
-  }
 }

@@ -6,11 +6,33 @@
             "Type": "AWS::S3::Bucket",
             "Properties": {}
         },
-        "GitcheeseApiRestApi": {
+        "GitcheeseRestApi": {
             "Type": "AWS::Serverless::Api",
             "Properties": {
                 "StageName": "v1",
-                "DefinitionUri": "./api-swagger.json"
+                "DefinitionUri": "./api-swagger.json",
+                "Variables": {
+                    "LoginGetFunctionName": { "Ref": "LoginGetFunction" }
+                }
+            }
+        },
+        "LoginGetFunction": {
+            "Type": "AWS::Serverless::Function",
+            "Properties": {
+                "Handler": "index.get",
+                "Runtime": "nodejs4.3",
+                "Policies": "AWSLambdaBasicExecutionRole",
+                "CodeUri": "./../api/login",
+                "Events": {
+                    "GetResource": {
+                        "Type": "Api",
+                        "Properties": {
+                            "Path": "/login",
+                            "Method": "GET",
+                            "RestApiId": { "Ref": "GitcheeseRestApi" }
+                        }
+                    }
+                }
             }
         }
     }

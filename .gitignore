@@ -1,3 +1,5 @@
+cloudformation/stack-template-packaged.yaml
+
 # Logs
 logs
 *.log
