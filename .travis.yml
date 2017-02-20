@@ -2,3 +2,5 @@ language: node_js
 
 install:
   - npm install api/login/github/token/get
+script:
+  - echo 'test'
