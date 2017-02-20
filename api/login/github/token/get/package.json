@@ -1,9 +1,10 @@
 {
-  "name": "login-github-token",
-  "dependencies": {
-    "jsonwebtoken": "^7.3.0",
-    "request": "^2.79.0",
-    "request-promise-native": "^1.0.3",
-    "uuid": "^3.0.1"
-  }
+    "version": "1.0.0",
+    "name": "login-github-token",
+    "dependencies": {
+        "jsonwebtoken": "^7.3.0",
+        "request": "^2.79.0",
+        "request-promise-native": "^1.0.3",
+        "uuid": "^3.0.1"
+    }
 }
