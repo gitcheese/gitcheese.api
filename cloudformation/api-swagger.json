@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "version": "2017-02-11T13:35:50Z",
-        "title": "githceese-api-staging"
+        "title": "githceese-api"
     },
     "host": "pt5uu416rc.execute-api.us-east-1.amazonaws.com",
     "basePath": "/v1",
