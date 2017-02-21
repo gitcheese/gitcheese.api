@@ -40,6 +40,7 @@
                     "LoginGithubGetFunctionName": { "Ref": "LoginGithubGetFunction" },
                     "LoginGithubTokenGetFunctionName": { "Ref": "LoginGithubTokenGetFunction" },
                     "ProfileGetFunctionName": { "Ref": "ProfileGetFunction" },
+                    "AuthorizerFunctionName": { "Ref": "AuthorizerFunction" },
                     "BucketName": { "Ref": "GitcheeseApiBucket" },
                     "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
                     "GithubClientId": { "Fn::Sub": "${GithubClientId}" },
@@ -146,27 +147,6 @@
                         }]
                     }
                 }]
-            }
-        },
-        "GitcheeseAuthorizer": {
-            "Type": "AWS::ApiGateway::Authorizer",
-            "Properties": {
-                "AuthorizerCredentials": { "Fn::GetAtt": ["AuthorizerRole", "Arn"] },
-                "AuthorizerResultTtlInSeconds": "300",
-                "AuthorizerUri": {
-                    "Fn::Join": ["", [
-                        "arn:aws:apigateway:",
-                        { "Ref": "AWS::Region" },
-                        ":lambda:path/2015-03-31/functions/",
-                        { "Fn::GetAtt": ["AuthorizerFunction", "Arn"] }, "/invocations"
-                    ]]
-                },
-                "Type": "TOKEN",
-                "IdentitySource": "method.request.header.Auth",
-                "Name": "GitcheeseAuthorizer",
-                "RestApiId": {
-                    "Ref": "GitcheeseRestApi"
-                }
             }
         }
     }
