@@ -1,7 +1,11 @@
 language: node_js
 
-install:
+before_install:
   - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+install:
   - npm install api/login/github/token/get
 script:
   - echo 'test'
+after_success:
+  - sh deploy-$TRAVIS_BRANCH
