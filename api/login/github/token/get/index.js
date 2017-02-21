@@ -1,5 +1,5 @@
 'use strict';
-const request = require('request-promise');
+const request = require('request-promise-native');
 const aws = require('aws-sdk');
 const uuid = require('uuid/v4');
 const jwt = require('jsonwebtoken');
