@@ -1,6 +1,7 @@
 language: node_js
 
 install:
+  - pip install awscli
   - npm install api/login/github/token/get
 script:
   - echo 'test'
