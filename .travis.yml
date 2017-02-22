@@ -6,5 +6,5 @@ before_install:
 install:
   - npm install ./api/login/github/token/get/ --prefix=./api/login/github/token/get/
 script:
-  - sed -e "s/\${BranchName}/$TRAVIS_BRANCH/" ./cloudformation/api-swagger.json
+  - sed -i -e "s/\${BranchName}/$TRAVIS_BRANCH/" ./cloudformation/api-swagger.json
   - sh deploy-$TRAVIS_BRANCH.sh
