@@ -18,7 +18,7 @@
             "x-amazon-apigateway-authtype": "oauth2",
             "x-amazon-apigateway-authorizer": {
                 "type": "token",
-                "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:account-id:function:gitcheese-api-${BranchName}-AuthorizerFunction/invocations",
+                "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:gitcheese-api-${BranchName}-AuthorizerFunction/invocations",
                 "authorizerCredentials": "arn:aws:iam::account-id:role"
             }
         }
