@@ -40,7 +40,6 @@
                     "LoginGithubGetFunctionName": { "Ref": "LoginGithubGetFunction" },
                     "LoginGithubTokenGetFunctionName": { "Ref": "LoginGithubTokenGetFunction" },
                     "ProfileGetFunctionName": { "Ref": "ProfileGetFunction" },
-                    "AuthorizerFunctionName": { "Ref": "AuthorizerFunction" },
                     "BucketName": { "Ref": "GitcheeseApiBucket" },
                     "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
                     "GithubClientId": { "Fn::Sub": "${GithubClientId}" },
@@ -112,6 +111,7 @@
         "AuthorizerFunction": {
             "Type": "AWS::Serverless::Function",
             "Properties": {
+                "FunctionName": { "Fn::Sub": "${ProjectName}-${ServiceName}-${BranchName}-AuthorizerFunction" },
                 "Handler": "index.handler",
                 "Runtime": "nodejs4.3",
                 "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
@@ -121,32 +121,6 @@
                         "JWT_SECRET": { "Fn::Sub": "${JWTSecret}" }
                     }
                 }
-            }
-        },
-        "AuthorizerRole": {
-            "Type": "AWS::IAM::Role",
-            "Properties": {
-                "AssumeRolePolicyDocument": {
-                    "Version": "2012-10-17",
-                    "Statement": [{
-                        "Effect": "Allow",
-                        "Principal": {
-                            "Service": ["apigateway.amazonaws.com"]
-                        },
-                        "Action": ["sts:AssumeRole"]
-                    }]
-                },
-                "Policies": [{
-                    "PolicyName": "lambda",
-                    "PolicyDocument": {
-                        "Version": "2012-10-17",
-                        "Statement": [{
-                            "Effect": "Allow",
-                            "Action": "lambda:invokeFunction",
-                            "Resource": { "Fn::GetAtt": ["AuthorizerFunction", "Arn"] }
-                        }]
-                    }
-                }]
             }
         }
     }

@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "version": "2017-02-11T13:35:50Z",
-        "title": "githceese-api"
+        "title": "githceese-api-${BranchName}"
     },
     "host": "pt5uu416rc.execute-api.us-east-1.amazonaws.com",
     "basePath": "/v1",
@@ -17,7 +17,7 @@
             "x-amazon-apigateway-authtype": "oauth2",
             "x-amazon-apigateway-authorizer": {
                 "type": "token",
-                "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:account-id:function:${stageVariables.AuthorizerFunctionName}/invocations",
+                "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:account-id:function:gitcheese-api-${BranchName}-AuthorizerFunction/invocations",
                 "authorizerCredentials": "arn:aws:iam::account-id:role"
             }
         }
