@@ -87,7 +87,9 @@ exports.put = (event, context, callback) => {
                     callback(err);
                     return;
                 }
+                console.log(data.Contents)
                 let reposToAdd = repos.filter(r => {
+                    console.log(`github/${githubId}/repos/${r.id}`)
                     return !data.Contents
                         .find(c => c.key.indexOf(`github/${githubId}/repos/${r.id}`) > -1);
                 });
