@@ -32,7 +32,6 @@ let getOwnedRepositories = githubLogin => {
             })
             .then(orgRepos => {
                 orgRepos = [].concat.apply([], orgRepos);
-                console.log(orgRepos);
                 resolve(personal.concat(orgRepos));
             })
             .catch(err => {
@@ -86,16 +85,14 @@ exports.put = (event, context, callback) => {
                 Prefix: `github/users/${githubId}/repos`
             }, (err, data) => {
                 if (err) {
-                    callback(err);
+                    console.log(err);
+                    callback('There was an erro.');
                     return;
                 }
-                console.log(data)
                 let reposToAdd = repos.filter(r => {
-                    console.log(`github/users/${githubId}/repos/${r.id}`)
                     return !data.Contents
                         .find(c => c.Key.indexOf(`github/users/${githubId}/repos/${r.id}/`) > -1);
                 });
-                console.log(reposToAdd);
                 return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, githubId, r)));
             });
         })
