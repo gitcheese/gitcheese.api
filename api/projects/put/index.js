@@ -32,7 +32,9 @@ let getOwnedRepositories = githubLogin => {
             })
             .then(orgRepos => {
                 console.log(orgRepos)
-                resolve(personal.concat(orgRepos));
+                Array.prototype.push.apply(personal, orgRepos);
+                console.log(personal)
+                resolve(personal);
             })
             .catch(err => {
                 reject(err);
