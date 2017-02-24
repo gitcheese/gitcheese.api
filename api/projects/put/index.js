@@ -74,5 +74,10 @@ exports.put = (event, context, callback) => {
                 });
                 return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, githubId, r)));
             });
+        })
+        .then(() => {
+            callback(null, {
+                statusCode: 200
+            });
         });
 };
