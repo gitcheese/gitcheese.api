@@ -6,7 +6,6 @@ let getOwnedRepositories = githubLogin => {
     return new Promise((resolve, reject) => {
         let personal;
         let organizational;
-        console.log('getting repos');
         request(`https://api.github.com/users/${githubLogin}/repos`, {
                 headers: {
                     'User-Agent': 'Gitcheese'
@@ -14,7 +13,6 @@ let getOwnedRepositories = githubLogin => {
                 json: true
             })
             .then(response => {
-                console.log(response);
                 personal = response.filter((repo) => !repo.fork);
                 return request(`https://api.github.com/users/${githubLogin}/orgs`, {
                     headers: {
@@ -24,7 +22,6 @@ let getOwnedRepositories = githubLogin => {
                 });
             })
             .then(organizations => {
-                console.log(organizations);
                 let orgRepos = organizations.map((org) => request(`https://api.github.com/orgs/${org.login}/repos`, {
                     headers: {
                         'User-Agent': 'Gitcheese'
@@ -37,7 +34,6 @@ let getOwnedRepositories = githubLogin => {
                 resolve(personal.concat(orgRepos));
             })
             .catch(err => {
-                console.log(err);
                 reject(err);
             });
     });
@@ -83,7 +79,6 @@ exports.put = (event, context, callback) => {
     let githubId = event.requestContext.authorizer.githubId;
     getOwnedRepositories(githubLogin)
         .then(repos => {
-            console.log(repos);
             s3.listObjectsV2({
                 Bucket: bucket,
                 Prefix: `github/${githubId}/repos`
@@ -92,11 +87,11 @@ exports.put = (event, context, callback) => {
                     callback(err);
                     return;
                 }
-                console.log(data);
                 let reposToAdd = repos.filter(r => {
-                    return !!data.Contents
+                    return !data.Contents
                         .find(c => c.key.indexOf(`github/${githubId}/repos/${r.id}`) > -1);
                 });
+                console.log(reposToAdd);
                 return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, githubId, r)));
             });
         })
@@ -104,5 +99,9 @@ exports.put = (event, context, callback) => {
             callback(null, {
                 statusCode: 200
             });
+        })
+        .catch(err => {
+            console.log(err);
+            callback('There was an erro.');
         });
 };
