@@ -127,7 +127,7 @@
         "ProjectsPutFunction": {
             "Type": "AWS::Serverless::Function",
             "Properties": {
-                "Handler": "index.get",
+                "Handler": "index.put",
                 "Runtime": "nodejs4.3",
                 "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
                 "CodeUri": "./../api/projects/put",
