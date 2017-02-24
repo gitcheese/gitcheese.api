@@ -81,7 +81,7 @@ exports.put = (event, context, callback) => {
         .then(repos => {
             s3.listObjectsV2({
                 Bucket: bucket,
-                Prefix: `github/${githubId}/repos`
+                Prefix: `github/users/${githubId}/repos`
             }, (err, data) => {
                 if (err) {
                     callback(err);
@@ -91,7 +91,7 @@ exports.put = (event, context, callback) => {
                 let reposToAdd = repos.filter(r => {
                     console.log(`github/users/${githubId}/repos/${r.id}`)
                     return !data.Contents
-                        .find(c => c.key.indexOf(`github/${githubId}/repos/${r.id}`) > -1);
+                        .find(c => c.key.indexOf(`github/users/${githubId}/repos/${r.id}`) > -1);
                 });
                 console.log(reposToAdd);
                 return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, githubId, r)));
