@@ -31,9 +31,11 @@ let getOwnedRepositories = githubLogin => {
                 return Promise.all(orgRepos);
             })
             .then(orgRepos => {
+                orgRepos = orgRepos.reduce((a, b) => {
+                    Array.prototype.push.apply(b, a);
+                });
                 console.log(orgRepos)
                 Array.prototype.push.apply(personal, orgRepos);
-                console.log(personal)
                 resolve(personal);
             })
             .catch(err => {
