@@ -31,6 +31,7 @@ let getOwnedRepositories = githubLogin => {
                 return Promise.all(orgRepos);
             })
             .then(orgRepos => {
+                console.log(orgRepos)
                 resolve(personal.concat(orgRepos));
             })
             .catch(err => {
