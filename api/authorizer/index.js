@@ -6,12 +6,10 @@ exports.handler = function(event, context, callback) {
         jwt.verify(event.authorizationToken, process.env.JWT_SECRET, (err, data) => {
             if (err) context.fail("Unauthorized");
             else {
-                console.log(data);
-                var userId = data.userId;
                 var arn = event.methodArn.split(':');
                 apiArn = arn[5].split('/');
                 var response = {
-                    principalId: userId,
+                    principalId: data.id,
                     policyDocument: {
                         "Version": "2012-10-17",
                         "Statement": [{
@@ -24,7 +22,9 @@ exports.handler = function(event, context, callback) {
                     }
                 };
                 response.context = {
-                    userId: userId
+                    userId: data.id,
+                    githubId: data.githubId,
+                    githubLogin: data.githubLogin
                 };
                 callback(null, response);
             }

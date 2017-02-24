@@ -40,6 +40,7 @@
                     "LoginGithubGetFunctionName": { "Ref": "LoginGithubGetFunction" },
                     "LoginGithubTokenGetFunctionName": { "Ref": "LoginGithubTokenGetFunction" },
                     "ProfileGetFunctionName": { "Ref": "ProfileGetFunction" },
+                    "ProjectsPutFunctionName": { "Ref": "ProjectsPutFunction" },
                     "BucketName": { "Ref": "GitcheeseApiBucket" },
                     "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
                     "GithubClientId": { "Fn::Sub": "${GithubClientId}" },
@@ -102,6 +103,26 @@
                         "Properties": {
                             "Path": "/profile",
                             "Method": "GET",
+                            "RestApiId": { "Ref": "GitcheeseRestApi" }
+                        }
+                    }
+                }
+            }
+        },
+        "ProjectsPutFunction": {
+            "Type": "AWS::Serverless::Function",
+            "Properties": {
+                "Handler": "index.get",
+                "Runtime": "nodejs4.3",
+                "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+                "CodeUri": "./../api/projects/put",
+                "Timeout": 10,
+                "Events": {
+                    "GetResource": {
+                        "Type": "Api",
+                        "Properties": {
+                            "Path": "/projects",
+                            "Method": "PUT",
                             "RestApiId": { "Ref": "GitcheeseRestApi" }
                         }
                     }
