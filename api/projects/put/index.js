@@ -72,7 +72,7 @@ exports.put = (event, context, callback) => {
                 }
                 console.log(data);
                 let reposToAdd = repos.filter(r => {
-                    return !data.Contents
+                    return !!data.Contents
                         .find(c => c.key.indexOf(`github/${githubId}/repos/${r.id}`) > -1);
                 });
                 return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, githubId, r)));
