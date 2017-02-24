@@ -65,22 +65,6 @@
                     "type": "aws_proxy"
                 }
             }
-        },
-        "/projects": {
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "security": [{
-                    "gitcheese-authorizer": []
-                }],
-                "responses": {},
-                "x-amazon-apigateway-integration": {
-                    "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProjectsPutFunctionName}/invocations",
-                    "httpMethod": "POST",
-                    "type": "aws_proxy"
-                }
-            }
         }
     }
 }
