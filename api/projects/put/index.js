@@ -87,7 +87,7 @@ exports.put = (event, context, callback) => {
                     callback(err);
                     return;
                 }
-                console.log(data.Contents)
+                console.log(data)
                 let reposToAdd = repos.filter(r => {
                     console.log(`github/${githubId}/repos/${r.id}`)
                     return !data.Contents
