@@ -61,6 +61,7 @@ exports.put = (event, context, callback) => {
     let githubId = event.requestContext.authorizer.githubId;
     getOwnedRepositories(githubLogin)
         .then(repos => {
+            console.log(repos);
             s3.listObjectsV2({
                 Bucket: bucket,
                 Prefix: `github/${githubId}/repos`
@@ -69,8 +70,10 @@ exports.put = (event, context, callback) => {
                     callback(err);
                     return;
                 }
+                console.log(data);
                 let reposToAdd = repos.filter(r => {
-                    return data.Contents.key.indexOf(`github/${githubId}/repos/${r.id}`) > -1;
+                    return !data.Contents
+                        .find(c => c.key.indexOf(`github/${githubId}/repos/${r.id}`) > -1);
                 });
                 return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, githubId, r)));
             });
