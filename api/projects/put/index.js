@@ -7,7 +7,7 @@ let getOwnedRepositories = githubLogin => {
         let personal;
         let organizational;
         console.log('getting repos');
-        request(`https://api.github.com/user/${githubLogin}/repos`, {
+        request(`https://api.github.com/users/${githubLogin}/repos`, {
                 headers: {
                     'User-Agent': 'Gitcheese'
                 },
@@ -16,7 +16,7 @@ let getOwnedRepositories = githubLogin => {
             .then(response => {
                 console.log(response);
                 personal = response.filter((repo) => !repo.fork);
-                return request(`https://api.github.com/user/${githubLogin}/orgs`, {
+                return request(`https://api.github.com/users/${githubLogin}/orgs`, {
                     headers: {
                         'User-Agent': 'Gitcheese'
                     },
@@ -25,7 +25,7 @@ let getOwnedRepositories = githubLogin => {
             })
             .then(organizations => {
                 console.log(organizations);
-                let orgRepos = organizations.map((org) => request(`https://api.github.com/org/${org.login}/repos`, {
+                let orgRepos = organizations.map((org) => request(`https://api.github.com/orgs/${org.login}/repos`, {
                     headers: {
                         'User-Agent': 'Gitcheese'
                     },
