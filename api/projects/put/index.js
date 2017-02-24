@@ -6,12 +6,15 @@ let getOwnedRepositories = githubLogin => {
     return new Promise((resolve, reject) => {
         let personal;
         let organizational;
+        console.log('getting repos');
         request(`https://api.github.com/user/${githubLogin}/repos`, { json: true })
             .then(response => {
+                console.log(response);
                 personal = response.filter((repo) => !repo.fork);
                 return request(`https://api.github.com/user/${githubLogin}/orgs`, { json: true });
             })
             .then(organizations => {
+                console.log(organizations);
                 let orgRepos = organizations.map((org) => request(`https://api.github.com/org/${org.login}/repos`, { json: true }));
                 return Promise.all(orgRepos);
             })
