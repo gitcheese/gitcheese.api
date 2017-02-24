@@ -20,6 +20,10 @@ let getOwnedRepositories = githubLogin => {
             })
             .then(orgRepos => {
                 resolve(personal.concat(orgRepos));
+            })
+            .catch(err=>{
+                console.log(err);
+                reject(err);
             });
     });
 };
