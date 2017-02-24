@@ -49,6 +49,21 @@
                 }
             }
         },
+        "AuthorizerFunction": {
+            "Type": "AWS::Serverless::Function",
+            "Properties": {
+                "FunctionName": { "Fn::Sub": "${ProjectName}-${ServiceName}-${BranchName}-AuthorizerFunction" },
+                "Handler": "index.handler",
+                "Runtime": "nodejs4.3",
+                "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+                "CodeUri": "./../api/authorizer",
+                "Environment": {
+                    "Variables": {
+                        "JWT_SECRET": { "Fn::Sub": "${JWTSecret}" }
+                    }
+                }
+            }
+        },
         "LoginGithubGetFunction": {
             "Type": "AWS::Serverless::Function",
             "Properties": {
@@ -125,21 +140,6 @@
                             "Method": "PUT",
                             "RestApiId": { "Ref": "GitcheeseRestApi" }
                         }
-                    }
-                }
-            }
-        },
-        "AuthorizerFunction": {
-            "Type": "AWS::Serverless::Function",
-            "Properties": {
-                "FunctionName": { "Fn::Sub": "${ProjectName}-${ServiceName}-${BranchName}-AuthorizerFunction" },
-                "Handler": "index.handler",
-                "Runtime": "nodejs4.3",
-                "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-                "CodeUri": "./../api/authorizer",
-                "Environment": {
-                    "Variables": {
-                        "JWT_SECRET": { "Fn::Sub": "${JWTSecret}" }
                     }
                 }
             }
