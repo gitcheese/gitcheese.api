@@ -1,9 +1,9 @@
 {
-    "version": "1.0.0",
-    "name": "projects-put",
-    "dependencies": {
-        "request": "^2.79.0",
-        "request-promise-native": "^1.0.3",
-        "uuid": "^3.0.1"
-    }
+  "version": "1.0.0",
+  "name": "projects-put",
+  "dependencies": {
+    "request": "^2.79.0",
+    "request-promise-native": "^1.0.3",
+    "uuid": "^3.0.1"
+  }
 }

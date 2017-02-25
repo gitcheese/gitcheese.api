@@ -1,4 +1,5 @@
 cloudformation/stack-template-packaged.yaml
+dist/
 
 # Logs
 logs

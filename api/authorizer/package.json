@@ -1,7 +1,7 @@
 {
-    "version": "1.0.0",
-    "name": "authorizer-function",
-    "dependencies": {
-        "jsonwebtoken": "^7.3.0"
-    }
+  "version": "1.0.0",
+  "name": "authorizer-function",
+  "dependencies": {
+    "jsonwebtoken": "^7.3.0"
+  }
 }

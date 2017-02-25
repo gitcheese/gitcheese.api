@@ -1,11 +1,11 @@
 
 aws cloudformation package \
-	--template-file cloudformation/stack-template.json \
-	--output-template-file cloudformation/stack-template-packaged.yaml \
+	--template-file dist/cloudformation/stack-template.json \
+	--output-template-file dist/cloudformation/stack-template-packaged.yaml \
 	--s3-bucket gitcheese-api-build-artifacts \
 
 aws cloudformation deploy \
-	--template-file cloudformation/stack-template-packaged.yaml \
+	--template-file dist/cloudformation/stack-template-packaged.yaml \
 	--stack-name githceese-api-${TRAVIS_BRANCH} \
 	--region us-east-1 \
 	--capabilities CAPABILITY_IAM \
