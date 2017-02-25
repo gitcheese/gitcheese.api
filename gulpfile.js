@@ -3,7 +3,7 @@ const babel = require('gulp-babel');
 const eslint = require('gulp-eslint');
 const install = require('gulp-install');
 var uglify = require('gulp-uglify');
-gulp.task('default', () => {
+gulp.task('default', function() {
   gulp.src('./api/**/package.json')
     .pipe(gulp.dest('dist/api'))
     .pipe(install());
