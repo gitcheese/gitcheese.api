@@ -5,6 +5,7 @@ before_install:
   - export PATH=$PATH:$HOME/.local/bin
 install:
   - npm install
+  - gulp -v
 script:
   - npm run build
   - sed -i -e "s/\${BranchName}/$TRAVIS_BRANCH/" ./dist/cloudformation/api-swagger.json
