@@ -21,8 +21,8 @@ let getOwnedRepositories = githubLogin => {
         return Promise.all(orgRepos);
       })
       .then(orgRepos => {
-        let allOrgRepos = ...orgRepos;
-        resolve(personal.push(...allOrgRepos));
+        orgRepos.forEach((org) => personal.push(...org));
+        resolve(personal);
       })
       .catch(err => {
         reject(err);
