@@ -3,7 +3,7 @@ const aws = require('aws-sdk');
 exports.get = (event, context, callback) => {
   let s3 = new aws.S3();
   let bucket = event.stageVariables.BucketName;
-  let userId = event.requestContext.authorizer.principalI;
+  let userId = event.requestContext.authorizer.principalId;
   s3.listObjectsV2({
     Bucket: bucket,
     Prefix: `users/${userId}/repos`
