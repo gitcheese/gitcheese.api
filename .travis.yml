@@ -8,6 +8,5 @@ install:
   - npm install
 script:
   - npm run build
-  - sed -i -e "s/\${BranchName}/$TRAVIS_BRANCH/" ./dist/cloudformation/api-swagger.json
   - npm run package-cloudformation
   - npm run deploy-$TRAVIS_BRANCH

@@ -2,7 +2,8 @@ const gulp = require('gulp');
 const babel = require('gulp-babel');
 const eslint = require('gulp-eslint');
 const install = require('gulp-install');
-var uglify = require('gulp-uglify');
+const uglify = require('gulp-uglify');
+const replace = require('gulp-token-replace');
 gulp.task('default', () => {
   gulp.src('./api/**/package.json')
     .pipe(gulp.dest('dist/api'))
@@ -16,5 +17,6 @@ gulp.task('default', () => {
     .pipe(uglify())
     .pipe(gulp.dest('dist/api'));
   gulp.src('cloudformation/**/*')
+    .pipe(replace({ global: process.env }))
     .pipe(gulp.dest('dist/cloudformation'));
 });
