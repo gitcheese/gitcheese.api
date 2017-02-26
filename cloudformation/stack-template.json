@@ -1,148 +1,148 @@
 {
-    "AWSTemplateFormatVersion": "2010-09-09",
-    "Transform": "AWS::Serverless-2016-10-31",
-    "Parameters": {
-        "ProjectName": {
-            "Type": "String"
-        },
-        "ServiceName": {
-            "Type": "String"
-        },
-        "BranchName": {
-            "Type": "String"
-        },
-        "JWTSecret": {
-            "Type": "String",
-            "NoEcho": true
-        },
-        "GithubClientId": {
-            "Type": "String",
-            "NoEcho": true
-        },
-        "GithubClientSecret": {
-            "Type": "String",
-            "NoEcho": true
-        }
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Transform": "AWS::Serverless-2016-10-31",
+  "Parameters": {
+    "ProjectName": {
+      "Type": "String"
     },
-    "Resources": {
-        "GitcheeseApiBucket": {
-            "Type": "AWS::S3::Bucket",
-            "Properties": {
-                "BucketName": { "Fn::Sub": "${ProjectName}-${ServiceName}-${BranchName}" }
-            }
-        },
-        "GitcheeseRestApi": {
-            "Type": "AWS::Serverless::Api",
-            "Properties": {
-                "StageName": "v1",
-                "DefinitionUri": "./api-swagger.json",
-                "Variables": {
-                    "LoginGithubGetFunctionName": { "Ref": "LoginGithubGetFunction" },
-                    "LoginGithubTokenGetFunctionName": { "Ref": "LoginGithubTokenGetFunction" },
-                    "ProfileGetFunctionName": { "Ref": "ProfileGetFunction" },
-                    "ProjectsPutFunctionName": { "Ref": "ProjectsPutFunction" },
-                    "BucketName": { "Ref": "GitcheeseApiBucket" },
-                    "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
-                    "GithubClientId": { "Fn::Sub": "${GithubClientId}" },
-                    "GithubClientSecret": { "Fn::Sub": "${GithubClientSecret}" },
-                    "RedirectUrl": "https://gitcheese.com/login/github/token"
-                }
-            }
-        },
-        "AuthorizerFunction": {
-            "Type": "AWS::Serverless::Function",
-            "Properties": {
-                "FunctionName": { "Fn::Sub": "${ProjectName}-${ServiceName}-${BranchName}-AuthorizerFunction" },
-                "Handler": "index.handler",
-                "Runtime": "nodejs4.3",
-                "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-                "CodeUri": "./../api/authorizer",
-                "Environment": {
-                    "Variables": {
-                        "JWT_SECRET": { "Fn::Sub": "${JWTSecret}" }
-                    }
-                }
-            }
-        },
-        "LoginGithubGetFunction": {
-            "Type": "AWS::Serverless::Function",
-            "Properties": {
-                "Handler": "index.get",
-                "Runtime": "nodejs4.3",
-                "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-                "CodeUri": "./../api/login/github/get",
-                "Timeout": 10,
-                "Events": {
-                    "GetResource": {
-                        "Type": "Api",
-                        "Properties": {
-                            "Path": "/login/github",
-                            "Method": "GET",
-                            "RestApiId": { "Ref": "GitcheeseRestApi" }
-                        }
-                    }
-                }
-            }
-        },
-        "LoginGithubTokenGetFunction": {
-            "Type": "AWS::Serverless::Function",
-            "Properties": {
-                "Handler": "index.get",
-                "Runtime": "nodejs4.3",
-                "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-                "CodeUri": "./../api/login/github/token/get",
-                "Timeout": 10,
-                "Events": {
-                    "GetResource": {
-                        "Type": "Api",
-                        "Properties": {
-                            "Path": "/login/github/token",
-                            "Method": "GET",
-                            "RestApiId": { "Ref": "GitcheeseRestApi" }
-                        }
-                    }
-                }
-            }
-        },
-        "ProfileGetFunction": {
-            "Type": "AWS::Serverless::Function",
-            "Properties": {
-                "Handler": "index.get",
-                "Runtime": "nodejs4.3",
-                "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-                "CodeUri": "./../api/profile/get",
-                "Timeout": 10,
-                "Events": {
-                    "GetResource": {
-                        "Type": "Api",
-                        "Properties": {
-                            "Path": "/profile",
-                            "Method": "GET",
-                            "RestApiId": { "Ref": "GitcheeseRestApi" }
-                        }
-                    }
-                }
-            }
-        },
-        "ProjectsPutFunction": {
-            "Type": "AWS::Serverless::Function",
-            "Properties": {
-                "Handler": "index.put",
-                "Runtime": "nodejs4.3",
-                "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-                "CodeUri": "./../api/projects/put",
-                "Timeout": 10,
-                "Events": {
-                    "GetResource": {
-                        "Type": "Api",
-                        "Properties": {
-                            "Path": "/projects",
-                            "Method": "PUT",
-                            "RestApiId": { "Ref": "GitcheeseRestApi" }
-                        }
-                    }
-                }
-            }
-        }
+    "ServiceName": {
+      "Type": "String"
+    },
+    "BranchName": {
+      "Type": "String"
+    },
+    "JWTSecret": {
+      "Type": "String",
+      "NoEcho": true
+    },
+    "GithubClientId": {
+      "Type": "String",
+      "NoEcho": true
+    },
+    "GithubClientSecret": {
+      "Type": "String",
+      "NoEcho": true
     }
+  },
+  "Resources": {
+    "GitcheeseApiBucket": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": { "Fn::Sub": "${ProjectName}-${ServiceName}-${BranchName}" }
+      }
+    },
+    "GitcheeseRestApi": {
+      "Type": "AWS::Serverless::Api",
+      "Properties": {
+        "StageName": "v1",
+        "DefinitionUri": "./api-swagger.json",
+        "Variables": {
+          "TokensGithubGetFunctionName": { "Ref": "TokensGithubGetFunction" },
+          "TokensGithubCallbackGetFunctionName": { "Ref": "TokensGithubCallbackGetFunction" },
+          "ProfileGetFunctionName": { "Ref": "ProfileGetFunction" },
+          "ProjectsPutFunctionName": { "Ref": "ProjectsPutFunction" },
+          "BucketName": { "Ref": "GitcheeseApiBucket" },
+          "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
+          "GithubClientId": { "Fn::Sub": "${GithubClientId}" },
+          "GithubClientSecret": { "Fn::Sub": "${GithubClientSecret}" },
+          "RedirectUrl": "https://gitcheese.com/login/github/token"
+        }
+      }
+    },
+    "AuthorizerFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "FunctionName": { "Fn::Sub": "${ProjectName}-${ServiceName}-${BranchName}-AuthorizerFunction" },
+        "Handler": "index.handler",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/authorizer",
+        "Environment": {
+          "Variables": {
+            "JWT_SECRET": { "Fn::Sub": "${JWTSecret}" }
+          }
+        }
+      }
+    },
+    "TokensGithubGetFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.get",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/tokens/github/get",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/tokens/github",
+              "Method": "GET",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "TokensGithubCallbackGetFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.get",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/tokens/github/callback/get",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/tokens/github/callback",
+              "Method": "GET",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "ProfileGetFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.get",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/profile/get",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/profile",
+              "Method": "GET",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "ProjectsPutFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.put",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/projects/put",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/projects",
+              "Method": "PUT",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    }
+  }
 }

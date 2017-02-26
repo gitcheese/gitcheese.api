@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "gulp",
-    "package-cloudformation": "aws cloudformation package --template-file dist/cloudformation/stack-template.json --output-template-file dist/cloudformation/stack-template-packaged.yaml --s3-bucket gitcheese-api-build-artifacts",
+    "package-template": "aws cloudformation package --template-file dist/cloudformation/stack-template.json --output-template-file dist/cloudformation/stack-template-packaged.yaml --s3-bucket gitcheese-api-build-artifacts",
     "deploy-dev": "aws cloudformation deploy --template-file dist/cloudformation/stack-template-packaged.yaml --stack-name githceese-api-$TRAVIS_BRANCH --region us-east-1 --capabilities CAPABILITY_IAM --parameter-overrides ProjectName=$PROJECT_NAME ServiceName=$SERVICE_NAME BranchName=$TRAVIS_BRANCH JWTSecret=$dev_JWT_SECRET GithubClientId=$dev_GITHUB_CLIENT_ID GithubClientSecret=$dev_GITHUB_CLIENT_SECRET",
     "deploy-mas": "aws cloudformation deploy --template-file dist/cloudformation/stack-template-packaged.yaml --stack-name githceese-api-$TRAVIS_BRANCH --region us-east-1 --capabilities CAPABILITY_IAM --parameter-overrides ProjectName=$PROJECT_NAME ServiceName=$SERVICE_NAME BranchName=$TRAVIS_BRANCH JWTSecret=$master_JWT_SECRET GithubClientId=$master_GITHUB_CLIENT_ID GithubClientSecret=$master_GITHUB_CLIENT_SECRET"
   }

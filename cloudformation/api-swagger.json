@@ -1,83 +1,83 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "2017-02-11T13:35:50Z",
-        "title": "githceese-api-{{TRAVIS_BRANCH}}",
-        "description": "Gitcheese API for {{TRAVIS_BRANCH}} branch."
-    },
-    "host": "pt5uu416rc.execute-api.us-east-1.amazonaws.com",
-    "basePath": "/v1",
-    "schemes": [
-        "https"
-    ],
-    "securityDefinitions": {
-        "gitcheese-authorizer": {
-            "type": "apiKey",
-            "name": "Authorization",
-            "in": "header",
-            "x-amazon-apigateway-authtype": "oauth2",
-            "x-amazon-apigateway-authorizer": {
-                "type": "token",
-                "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:gitcheese-api-{{TRAVIS_BRANCH}}-AuthorizerFunction/invocations",
-                "authorizerResultTtlInSeconds": 300
-            }
-        }
-    },
-    "paths": {
-        "/login/github": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {},
-                "x-amazon-apigateway-integration": {
-                    "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.LoginGithubGetFunctionName}/invocations",
-                    "httpMethod": "POST",
-                    "type": "aws_proxy"
-                }
-            }
-        },
-        "/login/github/token": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {},
-                "x-amazon-apigateway-integration": {
-                    "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.LoginGithubTokenGetFunctionName}/invocations",
-                    "httpMethod": "POST",
-                    "type": "aws_proxy"
-                }
-            }
-        },
-        "/profile": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "security": [{
-                    "gitcheese-authorizer": []
-                }],
-                "responses": {},
-                "x-amazon-apigateway-integration": {
-                    "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProfileGetFunctionName}/invocations",
-                    "httpMethod": "POST",
-                    "type": "aws_proxy"
-                }
-            }
-        },
-        "/projects": {
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "responses": {},
-                "x-amazon-apigateway-integration": {
-                    "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProjectsPutFunctionName}/invocations",
-                    "httpMethod": "POST",
-                    "type": "aws_proxy"
-                }
-            }
-        }
+  "swagger": "2.0",
+  "info": {
+    "version": "2017-02-11T13:35:50Z",
+    "title": "githceese-api-{{TRAVIS_BRANCH}}",
+    "description": "Gitcheese API for {{TRAVIS_BRANCH}} branch."
+  },
+  "host": "pt5uu416rc.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "securityDefinitions": {
+    "gitcheese-authorizer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "x-amazon-apigateway-authtype": "oauth2",
+      "x-amazon-apigateway-authorizer": {
+        "type": "token",
+        "authorizerUri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:gitcheese-api-{{TRAVIS_BRANCH}}-AuthorizerFunction/invocations",
+        "authorizerResultTtlInSeconds": 300
+      }
     }
+  },
+  "paths": {
+    "/tokens/github": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {},
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.TokensGithubGetFunctionName}/invocations",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/tokens/github/callback": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {},
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.TokensGithubCallbackGetFunctionName}/invocations",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/profile": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "security": [{
+          "gitcheese-authorizer": []
+        }],
+        "responses": {},
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProfileGetFunctionName}/invocations",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/projects": {
+      "put": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {},
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProjectsPutFunctionName}/invocations",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    }
+  }
 }
