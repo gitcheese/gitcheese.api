@@ -21,16 +21,20 @@ exports.get = (event, context, callback) => {
             if (err) {
               reject(err);
             } else {
-              resolve(data.Body.toString());
+              resolve(JSON.parse(data.Body.toString()));
             }
           });
         });
       });
       Promise.all(projectPromises)
         .then(projects => {
-          callback(null, {
+          console.log({
             statusCode: 200,
             body: projects
+          });
+          callback(null, {
+            statusCode: 200,
+            body: JSON.stringify(projects)
           });
         });
     }
