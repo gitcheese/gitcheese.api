@@ -1,10 +1,9 @@
 'use strict';
 const aws = require('aws-sdk');
 exports.get = (event, context, callback) => {
-  console.log(event);
   let s3 = new aws.S3();
   let bucket = event.stageVariables.BucketName;
-  let id = event.parameters.id;
+  let id = event.pathParameters.id;
   s3.getObject({
     Bucket: bucket,
     Key: `users/${event.requestContext.authorizer.principalId}/repos/${id}/data.json`
