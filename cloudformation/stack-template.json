@@ -40,6 +40,7 @@
           "TokensGithubGetFunctionName": { "Ref": "TokensGithubGetFunction" },
           "TokensGithubCallbackGetFunctionName": { "Ref": "TokensGithubCallbackGetFunction" },
           "ProfileGetFunctionName": { "Ref": "ProfileGetFunction" },
+          "ProfilePutFunctionName": { "Ref": "ProfilePutFunction" },
           "ProjectsPutFunctionName": { "Ref": "ProjectsPutFunction" },
           "ProjectsGetFunctionName": { "Ref": "ProjectsGetFunction" },
           "ProjectsIdGetFunctionName": { "Ref": "ProjectsIdGetFunction" },
@@ -120,6 +121,26 @@
             "Properties": {
               "Path": "/profile",
               "Method": "GET",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "ProfilePutFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.put",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/profile/put",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/profile",
+              "Method": "PUT",
               "RestApiId": { "Ref": "GitcheeseRestApi" }
             }
           }
