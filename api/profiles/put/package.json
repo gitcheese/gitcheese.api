@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "name": "profiles-put",
+  "dependencies": {
+    "validatorjs": "^3.11.0"
+  }
+}
