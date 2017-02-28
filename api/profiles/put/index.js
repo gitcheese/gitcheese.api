@@ -7,7 +7,7 @@ exports.put = (event, context, callback) => {
   s3.putObject({
     Bucket: bucket,
     Key: `users/${userId}/profile.json`,
-    Body: JSON.stringify(event.body)
+    Body: JSON.stringify(JSON.parse(event.body))
   }, (err, data) => {
     if (err) {
       console.log(err);
