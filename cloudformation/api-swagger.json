@@ -50,7 +50,7 @@
         }
       }
     },
-    "/profile": {
+    "/profiles": {
       "get": {
         "produces": [
           "application/json"
@@ -60,7 +60,7 @@
         }],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProfileGetFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProfilesGetFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }
@@ -71,7 +71,7 @@
         ],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProfilePutFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProfilesPutFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }

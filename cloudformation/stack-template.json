@@ -39,8 +39,8 @@
         "Variables": {
           "TokensGithubGetFunctionName": { "Ref": "TokensGithubGetFunction" },
           "TokensGithubCallbackGetFunctionName": { "Ref": "TokensGithubCallbackGetFunction" },
-          "ProfileGetFunctionName": { "Ref": "ProfileGetFunction" },
-          "ProfilePutFunctionName": { "Ref": "ProfilePutFunction" },
+          "ProfilesGetFunctionName": { "Ref": "ProfilesGetFunction" },
+          "ProfilesPutFunctionName": { "Ref": "ProfilesPutFunction" },
           "ProjectsPutFunctionName": { "Ref": "ProjectsPutFunction" },
           "ProjectsGetFunctionName": { "Ref": "ProjectsGetFunction" },
           "ProjectsIdGetFunctionName": { "Ref": "ProjectsIdGetFunction" },
@@ -107,13 +107,13 @@
         }
       }
     },
-    "ProfileGetFunction": {
+    "ProfilesGetFunction": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.get",
         "Runtime": "nodejs4.3",
         "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-        "CodeUri": "./../api/profile/get",
+        "CodeUri": "./../api/profiles/get",
         "Timeout": 10,
         "Events": {
           "GetResource": {
@@ -127,13 +127,13 @@
         }
       }
     },
-    "ProfilePutFunction": {
+    "ProfilesPutFunction": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.put",
         "Runtime": "nodejs4.3",
         "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-        "CodeUri": "./../api/profile/put",
+        "CodeUri": "./../api/profiles/put",
         "Timeout": 10,
         "Events": {
           "GetResource": {
