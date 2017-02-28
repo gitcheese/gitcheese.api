@@ -119,7 +119,7 @@
           "GetResource": {
             "Type": "Api",
             "Properties": {
-              "Path": "/profile",
+              "Path": "/profiles",
               "Method": "GET",
               "RestApiId": { "Ref": "GitcheeseRestApi" }
             }
@@ -139,7 +139,7 @@
           "GetResource": {
             "Type": "Api",
             "Properties": {
-              "Path": "/profile",
+              "Path": "/profiles",
               "Method": "PUT",
               "RestApiId": { "Ref": "GitcheeseRestApi" }
             }
