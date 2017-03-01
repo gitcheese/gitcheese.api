@@ -12,7 +12,7 @@ exports.put = (event, context, callback) => {
   let data = JSON.parse(event.body);
   var validation = new Validator(data, rules);
   if (validation.fails()) {
-    callback(null, { statusCode: 400, body: validation.all() });
+    callback(null, { statusCode: 400, body: JSON.stringify({ errors: validation.errors.all() }) });
     return;
   }
   s3.putObject({
