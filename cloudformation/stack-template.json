@@ -22,6 +22,13 @@
     "GithubClientSecret": {
       "Type": "String",
       "NoEcho": true
+    },
+    "StripeSecretKey": {
+      "Type": "String",
+      "NoEcho": true
+    },
+    "StripeApiUrl": {
+      "Type": "String"
     }
   },
   "Resources": {
@@ -44,10 +51,13 @@
           "ProjectsPutFunctionName": { "Ref": "ProjectsPutFunction" },
           "ProjectsGetFunctionName": { "Ref": "ProjectsGetFunction" },
           "ProjectsIdGetFunctionName": { "Ref": "ProjectsIdGetFunction" },
+          "ManagedAccountsPostFunctionName": { "Ref": "ManagedAccountsPostFunction" },
           "BucketName": { "Ref": "GitcheeseApiBucket" },
           "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
           "GithubClientId": { "Fn::Sub": "${GithubClientId}" },
           "GithubClientSecret": { "Fn::Sub": "${GithubClientSecret}" },
+          "StripeSecretKey": { "Fn::Sub": "${StripeSecretKey}" },
+          "StripeApiUrl": { "Fn::Sub": "${StripeApiUrl}" },
           "RedirectUrl": "https://gitcheese.com/login/github/token"
         }
       }
@@ -201,6 +211,26 @@
             "Properties": {
               "Path": "/projects/{id}",
               "Method": "GET",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "ManagedAccountsPostFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.post",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/managed-accounts/post",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/managed-accounts",
+              "Method": "POST",
               "RestApiId": { "Ref": "GitcheeseRestApi" }
             }
           }
