@@ -51,6 +51,7 @@
           "ProjectsPutFunctionName": { "Ref": "ProjectsPutFunction" },
           "ProjectsGetFunctionName": { "Ref": "ProjectsGetFunction" },
           "ProjectsIdGetFunctionName": { "Ref": "ProjectsIdGetFunction" },
+          "ManagedAccountsGetFunctionName": { "Ref": "ManagedAccountsGetFunction" },
           "ManagedAccountsPostFunctionName": { "Ref": "ManagedAccountsPostFunction" },
           "BucketName": { "Ref": "GitcheeseApiBucket" },
           "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
@@ -231,6 +232,26 @@
             "Properties": {
               "Path": "/managed-accounts",
               "Method": "POST",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "ManagedAccountsGetFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.get",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/managed-accounts/get",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/managed-accounts",
+              "Method": "GET",
               "RestApiId": { "Ref": "GitcheeseRestApi" }
             }
           }
