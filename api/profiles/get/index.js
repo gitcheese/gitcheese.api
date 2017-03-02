@@ -9,9 +9,9 @@ exports.get = (event, context, callback) => {
   }, (err, data) => {
     if (err) {
       console.log(err);
-      callback('There was an error.');
+      return callback('There was an error.');
     } else {
-      callback(null, {
+      return callback(null, {
         statusCode: 200,
         body: data.Body.toString()
       });

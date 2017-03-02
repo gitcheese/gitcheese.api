@@ -25,7 +25,7 @@ exports.handler = (event, context, callback) => {
           githubId: data.githubId,
           githubLogin: data.githubLogin
         };
-        callback(null, response);
+        return callback(null, response);
       }
     });
   } catch (exception) {
