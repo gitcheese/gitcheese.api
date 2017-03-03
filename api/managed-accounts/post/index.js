@@ -82,6 +82,7 @@ let managedAccountAlreadyExists = (bucket, userId) => {
       Bucket: bucket,
       Prefix: `users/${userId}/managed-account/data.json`
     }, (err, data) => {
+      console.log(data);
       if (err) {
         return reject(err);
       }
