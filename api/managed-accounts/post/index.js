@@ -54,7 +54,7 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
         }
       }
     };
-    request(`${stripeApiUrl}/accounts`, options)
+    request.post(`${stripeApiUrl}/accounts`, options)
       .then((response) => {
         console.log('stripe response:');
         console.log(response);
