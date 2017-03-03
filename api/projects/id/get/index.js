@@ -6,7 +6,7 @@ exports.get = (event, context, callback) => {
   let id = event.pathParameters.id;
   s3.getObject({
     Bucket: bucket,
-    Key: `users/${event.requestContext.authorizer.principalId}/repos/${id}/data.json`
+    Key: `users/${event.requestContext.authorizer.principalId}/projects/${id}/data.json`
   }, (err, data) => {
     if (err) {
       console.log(err);

@@ -50,13 +50,23 @@ let createRepository = (bucket, userId, githubUserId, repo) => {
         };
         s3.putObject({
           Bucket: bucket,
-          Key: `users/${userId}/repos/${newId}/data.json`,
+          Key: `users/${userId}/projects/${newId}/data.json`,
           Body: JSON.stringify(project)
         }, (err, data) => {
           if (err) {
             reject(err);
           } else {
-            resolve(project);
+            s3.putObject({
+              Bucket: bucket,
+              Key: `projects/${newId}/map.json`,
+              Body: JSON.stringify({ id: newId, userId: userId })
+            }, (err, data) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(project);
+              }
+            });
           }
         });
       }
