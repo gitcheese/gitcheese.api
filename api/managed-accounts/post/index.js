@@ -18,10 +18,8 @@ exports.post = (event, context, callback) => {
       body: JSON.stringify({ errors: validation.errors.all() })
     });
   }
-  console.log('checking managed account');
   managedAccountAlreadyExists(bucket, userId)
     .then((exists) => {
-      console.log('managed account exists:' + exists);
       if (exists) {
         return callback(null, {
           statusCode: 400,
@@ -54,8 +52,6 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
     };
     request.post(`${stripeApiUrl}/accounts`, options)
       .then((response) => {
-        console.log('stripe response:');
-        console.log(response);
         let s3 = new aws.S3();
         s3.putObject({
           Bucket: bucket,
@@ -70,8 +66,7 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
         });
       })
       .catch((err) => {
-        console.log(err);
-        reject('There was an error.');
+        reject(err);
       });
   });
 };
