@@ -10,7 +10,7 @@ exports.post = (event, context, callback) => {
   let userId = event.requestContext.authorizer.principalId;
   let stripeSecretKey = event.stageVariables.StripeSecretKey;
   let stripeApiUrl = event.stageVariables.StripeApiUrl;
-  let data = JSON.parse(event.body);
+  let data = JSON.parse(event.body) || {};
   var validation = new Validator(data, validationRules);
   if (validation.fails()) {
     return callback(null, {
