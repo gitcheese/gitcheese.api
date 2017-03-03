@@ -45,13 +45,11 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
       headers: {
         Authorization: `Bearer ${stripeSecretKey}`
       },
-      json: {
-        managed: true,
-        country: country,
-        transfer_schedule: {
-          delay_days: 30,
-          interval: 'daily'
-        }
+      form: {
+        'managed': true,
+        'country': country,
+        'transfer_schedule[delay_days]': 30,
+        'transfer_schedule[interval]': 'daily'
       }
     };
     request.post(`${stripeApiUrl}/accounts`, options)
