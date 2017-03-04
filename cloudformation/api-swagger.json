@@ -55,9 +55,6 @@
         "produces": [
           "application/json"
         ],
-        "security": [{
-          "gitcheese-authorizer": []
-        }],
         "responses": {},
         "x-amazon-apigateway-integration": {
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserGetFunctionName}/invocations",
@@ -69,9 +66,6 @@
         "produces": [
           "application/json"
         ],
-        "security": [{
-          "gitcheese-authorizer": []
-        }],
         "responses": {},
         "x-amazon-apigateway-integration": {
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserPutFunctionName}/invocations",
@@ -85,9 +79,6 @@
         "produces": [
           "application/json"
         ],
-        "security": [{
-          "gitcheese-authorizer": []
-        }],
         "responses": {},
         "x-amazon-apigateway-integration": {
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserReposPutFunctionName}/invocations",
@@ -99,9 +90,6 @@
         "produces": [
           "application/json"
         ],
-        "security": [{
-          "gitcheese-authorizer": []
-        }],
         "responses": {},
         "x-amazon-apigateway-integration": {
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserReposGetFunctionName}/invocations",
@@ -115,9 +103,6 @@
         "produces": [
           "application/json"
         ],
-        "security": [{
-          "gitcheese-authorizer": []
-        }],
         "responses": {},
         "x-amazon-apigateway-integration": {
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserReposIdGetFunctionName}/invocations",
@@ -131,9 +116,6 @@
         "produces": [
           "application/json"
         ],
-        "security": [{
-          "gitcheese-authorizer": []
-        }],
         "responses": {},
         "x-amazon-apigateway-integration": {
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserManagedAccountsPostFunctionName}/invocations",
@@ -145,12 +127,22 @@
         "produces": [
           "application/json"
         ],
-        "security": [{
-          "gitcheese-authorizer": []
-        }],
         "responses": {},
         "x-amazon-apigateway-integration": {
           "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserManagedAccountsGetFunctionName}/invocations",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/users/{userId}/repos/{repoId}/donations": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {},
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UsersIdReposIdDonationsPostFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }

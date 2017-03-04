@@ -53,6 +53,7 @@
           "UserReposIdGetFunctionName": { "Ref": "UserReposIdGetFunction" },
           "UserManagedAccountsGetFunctionName": { "Ref": "UserManagedAccountsGetFunction" },
           "UserManagedAccountsPostFunctionName": { "Ref": "UserManagedAccountsPostFunction" },
+          "UsersIdReposIdDonationsPostFunctionName": { "Ref": "UsersIdReposIdDonationsPostFunction" },
           "BucketName": { "Ref": "GitcheeseApiBucket" },
           "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
           "GithubClientId": { "Fn::Sub": "${GithubClientId}" },
@@ -257,6 +258,26 @@
           }
         }
       }
-    }
+    },
+    "UsersIdReposIdDonationsPostFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.get",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/users/id/repos/id/donations/post",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/users/{userId}/repos/{repoId}/donations",
+              "Method": "GET",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    }    
   }
 }
