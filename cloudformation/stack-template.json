@@ -53,6 +53,7 @@
           "UserReposIdGetFunctionName": { "Ref": "UserReposIdGetFunction" },
           "UserManagedAccountsGetFunctionName": { "Ref": "UserManagedAccountsGetFunction" },
           "UserManagedAccountsPostFunctionName": { "Ref": "UserManagedAccountsPostFunction" },
+          "UserManagedAccountsVerifications1PostFunctionName": { "Ref": "UserManagedAccountsVerifications1PostFunction" },
           "UsersIdReposIdDonationsPostFunctionName": { "Ref": "UsersIdReposIdDonationsPostFunction" },
           "BucketName": { "Ref": "GitcheeseApiBucket" },
           "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
@@ -259,6 +260,26 @@
         }
       }
     },
+    "UserManagedAccountsVerifications1PostFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.post",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/user/managed-accounts/verifications/1/post",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/user/managed-accounts/verifications/1",
+              "Method": "POST",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
     "UsersIdReposIdDonationsPostFunction": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
@@ -278,6 +299,6 @@
           }
         }
       }
-    }    
+    }
   }
 }
