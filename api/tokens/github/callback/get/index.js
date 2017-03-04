@@ -88,7 +88,17 @@ let getExistingUser = (bucket, githubId) => {
       if (err) {
         reject(err);
       } else {
-        resolve(JSON.parse(data.Body.toString()));
+        let map = JSON.parse(data.Body.toString());
+        s3.getObject({
+          Bucket: bucket,
+          Key: `users/${map.id}/profile.json`
+        }, (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(JSON.parse(data.Body.toString()));
+          }
+        });
       }
     });
   });
