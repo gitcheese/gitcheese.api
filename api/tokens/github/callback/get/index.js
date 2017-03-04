@@ -32,7 +32,7 @@ let userExists = (bucket, githubData) => {
     let s3 = new aws.S3();
     s3.listObjectsV2({
       Bucket: bucket,
-      Prefix: `github/users/${githubData.id}/map.json`
+      Prefix: `users/${githubData.id}/profile.json`
     }, (err, data) => {
       if (err) {
         reject(err);
@@ -48,32 +48,20 @@ let userExists = (bucket, githubData) => {
 let createUser = (bucket, githubData) => {
   return new Promise((resolve, reject) => {
     let s3 = new aws.S3();
-    let newId = uuid();
+    let profile = {
+      id: githubData.id,
+      email: githubData.email,
+      githubLogin: githubData.login
+    };
     s3.putObject({
       Bucket: bucket,
-      Key: `github/users/${githubData.id}/map.json`,
-      Body: JSON.stringify({ id: newId })
+      Key: `users/${githubData.id}/profile.json`,
+      Body: JSON.stringify(profile)
     }, (err, data) => {
       if (err) {
         reject(err);
       } else {
-        let profile = {
-          id: newId,
-          email: githubData.email,
-          githubId: githubData.id,
-          githubLogin: githubData.login
-        };
-        s3.putObject({
-          Bucket: bucket,
-          Key: `users/${newId}/profile.json`,
-          Body: JSON.stringify(profile)
-        }, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(profile);
-          }
-        });
+        resolve(profile);
       }
     });
   });
@@ -83,22 +71,12 @@ let getExistingUser = (bucket, githubId) => {
     let s3 = new aws.S3();
     s3.getObject({
       Bucket: bucket,
-      Key: `github/users/${githubId}/map.json`
+      Key: `users/${githubId}/profile.json`
     }, (err, data) => {
       if (err) {
         reject(err);
       } else {
-        let map = JSON.parse(data.Body.toString());
-        s3.getObject({
-          Bucket: bucket,
-          Key: `users/${map.id}/profile.json`
-        }, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(JSON.parse(data.Body.toString()));
-          }
-        });
+        resolve(JSON.parse(data.Body.toString()));
       }
     });
   });

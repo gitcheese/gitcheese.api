@@ -1,7 +1,6 @@
 'use strict';
 const request = require('request-promise-native');
 const aws = require('aws-sdk');
-const uuid = require('uuid/v4');
 let getOwnedRepositories = (githubLogin) => {
   let githubRequest = {
     headers: {
@@ -29,46 +28,24 @@ let getOwnedRepositories = (githubLogin) => {
       });
   });
 };
-let createRepository = (bucket, userId, githubUserId, repo) => {
+let createRepository = (bucket, userId, githubRepo) => {
   return new Promise((resolve, reject) => {
     let s3 = new aws.S3();
-    let newId = uuid();
+    let repo = {
+      id: githubRepo.id,
+      name: githubRepo.name,
+      fullname: githubRepo.full_name,
+      url: githubRepo.url
+    };
     s3.putObject({
       Bucket: bucket,
-      Key: `github/users/${githubUserId}/repos/${repo.id}/map.json`,
-      Body: JSON.stringify({ id: newId })
+      Key: `users/${userId}/repos/${repo.id}/data.json`,
+      Body: JSON.stringify(repo)
     }, (err, data) => {
       if (err) {
         reject(err);
       } else {
-        let project = {
-          id: newId,
-          githubId: repo.id,
-          name: repo.name,
-          fullname: repo.full_name,
-          url: repo.url
-        };
-        s3.putObject({
-          Bucket: bucket,
-          Key: `users/${userId}/projects/${newId}/data.json`,
-          Body: JSON.stringify(project)
-        }, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            s3.putObject({
-              Bucket: bucket,
-              Key: `projects/${newId}/map.json`,
-              Body: JSON.stringify({ id: newId, userId: userId })
-            }, (err, data) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(project);
-              }
-            });
-          }
-        });
+        resolve(repo);
       }
     });
   });
@@ -78,16 +55,11 @@ exports.put = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
   let githubLogin = event.requestContext.authorizer.githubLogin;
-  let githubId = event.requestContext.authorizer.githubId;
-  console.log(githubLogin);
-  console.log(githubId);
-  console.log(userId);
   getOwnedRepositories(githubLogin)
     .then(repos => {
-      console.log(repos);
       s3.listObjectsV2({
         Bucket: bucket,
-        Prefix: `github/users/${githubId}/repos`
+        Prefix: `users/${userId}/repos`
       }, (err, data) => {
         if (err) {
           console.log(err);
@@ -95,18 +67,16 @@ exports.put = (event, context, callback) => {
         }
         let reposToAdd = repos.filter(r => {
           return !data.Contents
-            .find(c => c.Key.indexOf(`github/users/${githubId}/repos/${r.id}/`) > -1);
+            .find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1);
         });
-        return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, githubId, r)));
+        return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, r)));
       });
     })
     .then(() => {
-      callback(null, {
-        statusCode: 200
-      });
+      return callback(null, { statusCode: 200 });
     })
     .catch(err => {
       console.log(err);
-      callback('There was an erro.');
+      return callback('There was an erro.');
     });
 };

@@ -21,8 +21,6 @@ exports.handler = (event, context, callback) => {
           }
         };
         response.context = {
-          userId: data.id,
-          githubId: data.githubId,
           githubLogin: data.githubLogin
         };
         return callback(null, response);

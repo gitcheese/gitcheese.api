@@ -50,7 +50,7 @@
         }
       }
     },
-    "/profiles": {
+    "/user": {
       "get": {
         "produces": [
           "application/json"
@@ -60,7 +60,7 @@
         }],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProfilesGetFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserGetFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }
@@ -74,13 +74,13 @@
         }],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProfilesPutFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserPutFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }
       }
     },
-    "/projects": {
+    "/user/repos": {
       "put": {
         "produces": [
           "application/json"
@@ -90,7 +90,7 @@
         }],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProjectsPutFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserReposPutFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }
@@ -104,13 +104,13 @@
         }],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProjectsGetFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserReposGetFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }
       }
     },
-    "/projects/{id}": {
+    "/user/repos/{id}": {
       "get": {
         "produces": [
           "application/json"
@@ -120,13 +120,13 @@
         }],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ProjectsIdGetFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserReposIdGetFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }
       }
     },
-    "/managed-accounts": {
+    "/user/managed-accounts": {
       "post": {
         "produces": [
           "application/json"
@@ -136,7 +136,7 @@
         }],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ManagedAccountsPostFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserManagedAccountsPostFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }
@@ -150,7 +150,7 @@
         }],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.ManagedAccountsGetFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserManagedAccountsGetFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }

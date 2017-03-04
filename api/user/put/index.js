@@ -21,7 +21,7 @@ exports.put = (event, context, callback) => {
       console.log(err);
       callback('There was an error.');
     } else {
-      callback(null, {
+      return callback(null, {
         statusCode: 200
       });
     }

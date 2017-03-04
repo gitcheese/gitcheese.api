@@ -6,7 +6,7 @@ exports.get = (event, context, callback) => {
   let userId = event.requestContext.authorizer.principalId;
   s3.listObjectsV2({
     Bucket: bucket,
-    Prefix: `users/${userId}/projects`
+    Prefix: `users/${userId}/repos`
   }, (err, data) => {
     if (err) {
       console.log(err);
