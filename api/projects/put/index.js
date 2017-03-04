@@ -2,7 +2,7 @@
 const request = require('request-promise-native');
 const aws = require('aws-sdk');
 const uuid = require('uuid/v4');
-let getOwnedRepositories = githubLogin => {
+let getOwnedRepositories = (githubLogin) => {
   let githubRequest = {
     headers: {
       'User-Agent': 'Gitcheese'
@@ -79,16 +79,19 @@ exports.put = (event, context, callback) => {
   let userId = event.requestContext.authorizer.principalId;
   let githubLogin = event.requestContext.authorizer.githubLogin;
   let githubId = event.requestContext.authorizer.githubId;
+  console.log(githubLogin);
+  console.log(githubId);
+  console.log(userId);
   getOwnedRepositories(githubLogin)
     .then(repos => {
+      console.log(repos);
       s3.listObjectsV2({
         Bucket: bucket,
         Prefix: `github/users/${githubId}/repos`
       }, (err, data) => {
         if (err) {
           console.log(err);
-          callback('There was an erro.');
-          return;
+          return callback('There was an erro.');
         }
         let reposToAdd = repos.filter(r => {
           return !data.Contents
