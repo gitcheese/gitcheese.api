@@ -48,7 +48,8 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
         'country': country,
         'transfer_schedule[delay_days]': 30,
         'transfer_schedule[interval]': 'daily'
-      }
+      },
+      json: true
     };
     request.post(`${stripeApiUrl}/accounts`, options)
       .then((response) => {
