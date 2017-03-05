@@ -79,22 +79,19 @@ let updateVerificationStatus = (bucket, userId, stripeApiUrl, stripeSecretKey, m
     };
     request.get(`${stripeApiUrl}/accounts/${managedAccount.id}`, options)
       .then((response) => {
-        if (response.status === 'succeeded') {
-          let s3 = new aws.S3();
-          managedAccount.verification = response.verification;
-          s3.putObject({
-            Bucket: bucket,
-            Key: `users/${userId}/managed-account/data.json`,
-            Body: JSON.stringify(managedAccount)
-          }, (err, data) => {
-            if (err) {
-              return reject(err);
-            } else {
-              resolve();
-            }
-          });
-        }
-        return reject(response);
+        let s3 = new aws.S3();
+        managedAccount.verification = response.verification;
+        s3.putObject({
+          Bucket: bucket,
+          Key: `users/${userId}/managed-account/data.json`,
+          Body: JSON.stringify(managedAccount)
+        }, (err, data) => {
+          if (err) {
+            return reject(err);
+          } else {
+            return resolve();
+          }
+        });
       })
       .catch((err) => {
         reject(err);
