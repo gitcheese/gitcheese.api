@@ -52,6 +52,7 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
     };
     request.post(`${stripeApiUrl}/accounts`, options)
       .then((response) => {
+        console.log(response);
         let s3 = new aws.S3();
         s3.putObject({
           Bucket: bucket,
