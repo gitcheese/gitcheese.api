@@ -57,7 +57,7 @@ let updateTosInfo = (stripeApiUrl, stripeSecretKey, managedAccountId, data) => {
       },
       form: {
         'tos_acceptance[ip]': data.tosAcceptanceIp,
-        'tos_acceptance[date': 'date here'
+        'tos_acceptance[date': new Date().getTime() / 1000
       },
       json: true
     };
