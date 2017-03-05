@@ -52,12 +52,14 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
     };
     request.post(`${stripeApiUrl}/accounts`, options)
       .then((response) => {
+        let body = { id: response.id, verification: response.verification };
         console.log(response);
+        console.log(body);
         let s3 = new aws.S3();
         s3.putObject({
           Bucket: bucket,
           Key: `users/${userId}/managed-account/data.json`,
-          Body: JSON.stringify({ id: response.id, verification: response.verification })
+          Body: JSON.stringify(body)
         }, (err, data) => {
           if (err) {
             return reject('There was an error.');
