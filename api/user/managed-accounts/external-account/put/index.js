@@ -3,14 +3,9 @@ const aws = require('aws-sdk');
 const request = require('request-promise-native');
 const Validator = require('validatorjs');
 const validationRules = {
-  legalEntityType: 'required',
-  legalEntityFirstName: 'required',
-  legalEntityLastName: 'required',
-  legalEntityDobDay: 'required',
-  legalEntityDobMonth: 'required',
-  legalEntityDobYear: 'required'
+  externalAccountToken: 'required'
 };
-exports.post = (event, context, callback) => {
+exports.put = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
   let stripeSecretKey = event.stageVariables.StripeSecretKey;
@@ -27,7 +22,7 @@ exports.post = (event, context, callback) => {
   getManagedAccount(bucket, userId)
     .then((account) => {
       managedAccount = account;
-      return updateLegalEntityInfo(stripeApiUrl, stripeSecretKey, managedAccount.id, data);
+      return updateExternalAccountInfo(stripeApiUrl, stripeSecretKey, managedAccount.id, data);
     })
     .then(() => {
       return updateVerificationStatus(bucket, userId, stripeApiUrl, stripeSecretKey, managedAccount);
@@ -54,22 +49,18 @@ let getManagedAccount = (bucket, userId) => {
     });
   });
 };
-let updateLegalEntityInfo = (stripeApiUrl, stripeSecretKey, managedAccountId, data) => {
+let updateExternalAccountInfo = (stripeApiUrl, stripeSecretKey, managedAccountId, data) => {
   return new Promise((resolve, reject) => {
     let options = {
       headers: {
         Authorization: `Bearer ${stripeSecretKey}`
       },
       form: {
-        'legal_entity[type]': data.legalEntityType,
-        'legal_entity[first_name]': data.legalEntityFirstName,
-        'legal_entity[last_name]': data.legalEntityLastName,
-        'legal_entity[dob][day]': data.legalEntityDobDay,
-        'legal_entity[dob][month]': data.legalEntityDobMonth,
-        'legal_entity[dob][year]': data.legalEntityDobYear
-      }
+        'external_account': data.externalAccountToken
+      },
+      json: true
     };
-    request.post(`${stripeApiUrl}/accounts/${managedAccountId}`, options)
+    request.post(`${stripeApiUrl}/accounts/${managedAccountId}/external_accounts`, options)
       .then((response) => {
         if (response.status === 'succeeded') {
           return resolve(response);
@@ -86,7 +77,8 @@ let updateVerificationStatus = (bucket, userId, stripeApiUrl, stripeSecretKey, m
     let options = {
       headers: {
         Authorization: `Bearer ${stripeSecretKey}`
-      }
+      },
+      json: true
     };
     request.get(`${stripeApiUrl}/accounts/${managedAccount.id}`, options)
       .then((response) => {
