@@ -7,7 +7,7 @@ exports.get = (event, context, callback) => {
     .then((account) => {
       return callback(null, {
         statusCode: 200,
-        body: account
+        body: JSON.stringify(account)
       });
     })
     .catch(() => {
@@ -27,7 +27,7 @@ let getManagedAccount = (bucket, userId) => {
       if (err) {
         return reject(err);
       }
-      return resolve(data.Body.toString());
+      return resolve(JSON.parse(data.Body.toString()));
     });
   });
 };
