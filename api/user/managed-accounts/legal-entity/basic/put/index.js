@@ -3,12 +3,12 @@ const aws = require('aws-sdk');
 const request = require('request-promise-native');
 const Validator = require('validatorjs');
 const validationRules = {
-  legalEntityType: 'required',
+  legalEntityType: 'required|in:individual,company',
   legalEntityFirstName: 'required',
   legalEntityLastName: 'required',
-  legalEntityDobDay: 'required',
-  legalEntityDobMonth: 'required',
-  legalEntityDobYear: 'required'
+  legalEntityDobDay: 'required|numeric|min:1|max:31',
+  legalEntityDobMonth: 'required|numeric|min:1|max:12',
+  legalEntityDobYear: 'required|numeric|min:1900'
 };
 exports.put = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
