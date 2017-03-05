@@ -156,14 +156,40 @@
         }
       }
     },
-    "/user/managed-accounts/verifications/1": {
+    "/user/managed-accounts/external-account": {
       "post": {
         "produces": [
           "application/json"
         ],
         "responses": {},
         "x-amazon-apigateway-integration": {
-          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserManagedAccountsVerifications1PostFunctionName}/invocations",
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserManagedAccountsExternalAccountPostFunctionName}/invocations",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/user/managed-accounts/legal-entity/basic": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {},
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserManagedAccountsLegalEntityBasicPostFunctionName}/invocations",
+          "httpMethod": "POST",
+          "type": "aws_proxy"
+        }
+      }
+    },
+    "/user/managed-accounts/terms-of-service": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {},
+        "x-amazon-apigateway-integration": {
+          "uri": "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:253276595623:function:${stageVariables.UserManagedAccountsTermsOfServicePostFunctionName}/invocations",
           "httpMethod": "POST",
           "type": "aws_proxy"
         }

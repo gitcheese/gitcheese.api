@@ -53,7 +53,9 @@
           "UserReposIdGetFunctionName": { "Ref": "UserReposIdGetFunction" },
           "UserManagedAccountsGetFunctionName": { "Ref": "UserManagedAccountsGetFunction" },
           "UserManagedAccountsPostFunctionName": { "Ref": "UserManagedAccountsPostFunction" },
-          "UserManagedAccountsVerifications1PostFunctionName": { "Ref": "UserManagedAccountsVerifications1PostFunction" },
+          "UserManagedAccountsExternalAccountPostFunctionName": { "Ref": "UserManagedAccountsExternalAccountPostFunction" },
+          "UserManagedAccountsLegalEntityBasicPostFunctionName": { "Ref": "UserManagedAccountsLegalEntityBasicPostFunction" },
+          "UserManagedAccountsTermsOfServicePostFunctionName": { "Ref": "UserManagedAccountsTermsOfServicePostFunction" },
           "UsersIdReposIdDonationsPostFunctionName": { "Ref": "UsersIdReposIdDonationsPostFunction" },
           "BucketName": { "Ref": "GitcheeseApiBucket" },
           "JWTSecret": { "Fn::Sub": "${JWTSecret}" },
@@ -260,19 +262,59 @@
         }
       }
     },
-    "UserManagedAccountsVerifications1PostFunction": {
+    "UserManagedAccountsExternalAccountPostFunction": {
       "Type": "AWS::Serverless::Function",
       "Properties": {
         "Handler": "index.post",
         "Runtime": "nodejs4.3",
         "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
-        "CodeUri": "./../api/user/managed-accounts/verifications/1/post",
+        "CodeUri": "./../api/user/managed-accounts/external-account/post",
         "Timeout": 10,
         "Events": {
           "GetResource": {
             "Type": "Api",
             "Properties": {
-              "Path": "/user/managed-accounts/verifications/1",
+              "Path": "/user/managed-accounts/external-account",
+              "Method": "POST",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "UserManagedAccountsLegalEntityBasicPostFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.post",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/user/managed-accounts/legal-entity/basic/post",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/user/managed-accounts/legal-entity/basic",
+              "Method": "POST",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "UserManagedAccountsTermsOfServicePostFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.post",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/user/managed-accounts/terms-of-service/post",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/user/managed-accounts/terms-of-service",
               "Method": "POST",
               "RestApiId": { "Ref": "GitcheeseRestApi" }
             }
