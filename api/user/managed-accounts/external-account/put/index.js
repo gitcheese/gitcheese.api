@@ -62,10 +62,7 @@ let updateExternalAccountInfo = (stripeApiUrl, stripeSecretKey, managedAccountId
     };
     request.post(`${stripeApiUrl}/accounts/${managedAccountId}/external_accounts`, options)
       .then((response) => {
-        if (response.status === 'succeeded') {
-          return resolve(response);
-        }
-        return reject(response);
+        return resolve(response);
       })
       .catch((err) => {
         reject(err);

@@ -63,10 +63,7 @@ let updateTosInfo = (stripeApiUrl, stripeSecretKey, managedAccountId, data) => {
     };
     request.post(`${stripeApiUrl}/accounts/${managedAccountId}`, options)
       .then((response) => {
-        if (response.status === 'succeeded') {
-          return resolve(response);
-        }
-        return reject(response);
+        return resolve(response);
       })
       .catch((err) => {
         reject(err);
