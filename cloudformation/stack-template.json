@@ -63,7 +63,7 @@
           "GithubClientSecret": { "Fn::Sub": "${GithubClientSecret}" },
           "StripeSecretKey": { "Fn::Sub": "${StripeSecretKey}" },
           "StripeApiUrl": { "Fn::Sub": "${StripeApiUrl}" },
-          "RedirectUrl": "https://gitcheese.com/login/github/token"
+          "RedirectUrl": "http://localhost:8080/app/login/success"
         }
       }
     },
