@@ -104,14 +104,9 @@ exports.get = (event, context, callback) => {
       }
     })
     .then((userProfile) => {
-      console.log('finalizing');
       let token = jwt.sign(userProfile, event.stageVariables.JWTSecret);
       let url = `${event.stageVariables.RedirectUrl}?token=${token}`;
-      console.log({
-        statusCode: 302,
-        headers: { location: url }
-      });
-      callback(null, {
+      return callback(null, {
         statusCode: 302,
         headers: { location: url }
       });
