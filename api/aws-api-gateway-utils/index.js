@@ -1,20 +1,20 @@
  class Callbacks {
-   constructor (awsCallback) {
+   constructor(awsCallback) {
      this.awsCallback = awsCallback;
    }
-   ok (body) {
+   ok(body) {
      return this._executeCallback(200, body);
    }
-   badRequest (body) {
+   badRequest(body) {
      return this._executeCallback(400, body);
    }
-   found (location) {
+   found(location) {
      return this._executeCallback(302, null, { location: location });
    }
-   internalServerError () {
+   internalServerError() {
      return this.awsCallback('something went wrong :(');
    }
-   _executeCallback (code, body, additionalHeaders) {
+   _executeCallback(code, body, additionalHeaders) {
      let response = {
        statusCode: code,
        headers: {
@@ -30,6 +30,4 @@
      return this.awsCallback(null, response);
    }
  }
- exports.utils = {
-   Callbacks: Callbacks
- };
+ exports.Callbacks = Callbacks;

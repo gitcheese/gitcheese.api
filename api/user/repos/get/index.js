@@ -5,7 +5,6 @@ exports.get = (event, context, callback) => {
   let s3 = new aws.S3();
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
-  console.log(apiUtils);
   let callbacks = new apiUtils.Callbacks(callback);
   s3.listObjectsV2({
     Bucket: bucket,
