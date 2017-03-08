@@ -23,6 +23,48 @@
       }
     }
   },
+  "definitions": {
+    "options": {
+      "consumes": [
+        "application/json"
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "headers": {
+            "Access-Control-Allow-Origin": {
+              "type": "string"
+            },
+            "Access-Control-Allow-Methods": {
+              "type": "string"
+            },
+            "Access-Control-Allow-Headers": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "x-amazon-apigateway-integration": {
+        "responses": {
+          "default": {
+            "statusCode": "200",
+            "responseParameters": {
+              "method.response.header.Access-Control-Allow-Methods": "'*'",
+              "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+              "method.response.header.Access-Control-Allow-Origin": "'*'"
+            }
+          }
+        },
+        "requestTemplates": {
+          "application/json": "{\"statusCode\": 200}"
+        },
+        "passthroughBehavior": "when_no_match",
+        "type": "mock"
+      }
+    }
+  },
   "paths": {
     "/tokens/github": {
       "get": {
@@ -37,44 +79,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/tokens/github/callback": {
@@ -90,44 +95,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/user": {
@@ -160,44 +128,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/user/repos": {
@@ -230,44 +161,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/user/repos/{id}": {
@@ -286,44 +180,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/user/managed-accounts": {
@@ -356,44 +213,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/user/managed-accounts/external-account": {
@@ -412,44 +232,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/user/managed-accounts/legal-entity/basic": {
@@ -468,44 +251,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/user/managed-accounts/terms-of-service": {
@@ -524,44 +270,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     },
     "/users/{userId}/repos/{repoId}/donations": {
@@ -577,44 +286,7 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "responses": {
-          "200": {
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "x-amazon-apigateway-integration": {
-          "responses": {
-            "default": {
-              "statusCode": "200",
-              "responseParameters": {
-                "method.response.header.Access-Control-Allow-Methods": "'*'",
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'"
-              }
-            }
-          },
-          "requestTemplates": {
-            "application/json": "{\"statusCode\": 200}"
-          },
-          "passthroughBehavior": "when_no_match",
-          "type": "mock"
-        }
+        "$ref": "#/definitions/options"
       }
     }
   }
