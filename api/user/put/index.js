@@ -1,5 +1,6 @@
 'use strict';
 const aws = require('aws-sdk');
+const http = require('api-utils').http;
 const Validator = require('validatorjs');
 exports.put = (event, context, callback) => {
   let s3 = new aws.S3();
@@ -9,8 +10,7 @@ exports.put = (event, context, callback) => {
   let data = JSON.parse(event.body);
   var validation = new Validator(data, rules);
   if (validation.fails()) {
-    callback(null, { statusCode: 400, body: JSON.stringify({ errors: validation.errors.all() }) });
-    return;
+    return http.response.badRequest(callback, validation.errors.all());
   }
   s3.putObject({
     Bucket: bucket,
@@ -19,11 +19,9 @@ exports.put = (event, context, callback) => {
   }, (err, data) => {
     if (err) {
       console.log(err);
-      callback('There was an error.');
+      return http.response.error(callback);
     } else {
-      return callback(null, {
-        statusCode: 200
-      });
+      return http.response.ok(callback);
     }
   });
 };

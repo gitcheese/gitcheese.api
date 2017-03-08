@@ -1,20 +1,15 @@
 'use strict';
 const aws = require('aws-sdk');
+const http = require('api-utils').http;
 exports.get = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
   getManagedAccount(bucket, userId)
     .then((account) => {
-      return callback(null, {
-        statusCode: 200,
-        body: JSON.stringify(account)
-      });
+      return http.response.ok(callback, account);
     })
     .catch(() => {
-      return callback(null, {
-        statusCode: 200,
-        body: null
-      });
+      return http.response.ok(callback);
     });
 };
 let getManagedAccount = (bucket, userId) => {

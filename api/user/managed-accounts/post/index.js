@@ -1,5 +1,6 @@
 'use strict';
 const aws = require('aws-sdk');
+const http = require('api-utils').http;
 const request = require('request-promise-native');
 const Validator = require('validatorjs');
 const validationRules = {
@@ -13,27 +14,21 @@ exports.post = (event, context, callback) => {
   let data = JSON.parse(event.body) || {};
   var validation = new Validator(data, validationRules);
   if (validation.fails()) {
-    return callback(null, {
-      statusCode: 400,
-      body: JSON.stringify({ errors: validation.errors.all() })
-    });
+    return http.response.badRequest(callback, validation.errors.all());
   }
   managedAccountAlreadyExists(bucket, userId)
     .then((exists) => {
       if (exists) {
-        return callback(null, {
-          statusCode: 400,
-          body: JSON.stringify({ errors: 'Managed account allready exists.' })
-        });
+        return http.response.badRequest(callback, { errors: 'Managed account allready exists.' });
       }
       return createManagedAccount(stripeApiUrl, stripeSecretKey, bucket, userId, data.country);
     })
     .then(() => {
-      return callback(null, { statusCode: 200 });
+      return http.response.ok(callback);
     })
     .catch((err) => {
       console.log(err);
-      return callback('There was an error.');
+      return http.response.error(callback);
     });
 };
 let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, country) => {

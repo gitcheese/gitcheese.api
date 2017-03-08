@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "name": "tokens-github-get",
+  "dependencies": {
+    "api-utils": "file:../../../../local-packages/api-utils"
+  }
+}

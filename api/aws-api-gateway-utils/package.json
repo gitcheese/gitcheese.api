@@ -1,6 +1,0 @@
-{
-  "name": "aws-api-gateway-utils",
-  "version": "1.0.0",
-  "description": "Collection of utility classes for aws-api-gateway",
-  "main": "index.js"
-}

@@ -1,0 +1,6 @@
+{
+  "name": "api-utils",
+  "version": "1.0.0",
+  "description": "Collection of gitcheese api utility classes",
+  "main": "index.js"
+}

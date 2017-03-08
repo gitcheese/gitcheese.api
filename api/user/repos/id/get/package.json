@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "name": "user-repos-id-get",
+  "dependencies": {
+    "aws-api-gateway-utils": "file:../../../../../local-packages/api-utils"
+  }
+}

@@ -1,5 +1,6 @@
 'use strict';
 const aws = require('aws-sdk');
+const http = require('api-utils').http;
 exports.get = (event, context, callback) => {
   let s3 = new aws.S3();
   let bucket = event.stageVariables.BucketName;
@@ -10,12 +11,9 @@ exports.get = (event, context, callback) => {
   }, (err, data) => {
     if (err) {
       console.log(err);
-      callback('There was an error.');
+      return http.response.error(callback);
     } else {
-      callback(null, {
-        statusCode: 200,
-        body: data.Body.toString()
-      });
+      return http.response.ok(callback, JSON.parse(data.Body.toString));
     }
   });
 };

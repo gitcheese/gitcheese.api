@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 exports.handler = (event, context, callback) => {
-  console.log('Client token: ' + event.authorizationToken);
   try {
     jwt.verify(event.authorizationToken, process.env.JWT_SECRET, (err, data) => {
       if (err) context.fail('Unauthorized');

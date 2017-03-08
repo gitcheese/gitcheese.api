@@ -1,6 +1,7 @@
 'use strict';
-const request = require('request-promise-native');
 const aws = require('aws-sdk');
+const request = require('request-promise-native');
+const response = require('api-utils').response;
 let getOwnedRepositories = (githubLogin) => {
   let githubRequest = {
     headers: {
@@ -63,7 +64,7 @@ exports.put = (event, context, callback) => {
       }, (err, data) => {
         if (err) {
           console.log(err);
-          return callback('There was an erro.');
+          return response.error(callback);
         }
         let reposToAdd = repos.filter(r => {
           return !data.Contents
@@ -73,10 +74,10 @@ exports.put = (event, context, callback) => {
       });
     })
     .then(() => {
-      return callback(null, { statusCode: 200 });
+      return response.ok(callback);
     })
     .catch(err => {
       console.log(err);
-      return callback('There was an erro.');
+      return response.error(callback);
     });
 };

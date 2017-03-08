@@ -1,7 +1,41 @@
 'use strict';
-const request = require('request-promise-native');
 const aws = require('aws-sdk');
 const jwt = require('jsonwebtoken');
+const http = require('api-utils').http;
+const request = require('request-promise-native');
+exports.get = (event, context, callback) => {
+  let bucket = event.stageVariables.BucketName;
+  let tokenRequest = {
+    json: {
+      client_id: event.stageVariables.GithubClientId,
+      client_secret: event.stageVariables.GithubClientSecret,
+      code: event.queryStringParameters.code
+    }
+  };
+  request('https://github.com/login/oauth/access_token', tokenRequest)
+    .then((response) => {
+      return getGithubData(response.access_token);
+    })
+    .then((githubData) => {
+      return userExists(bucket, githubData);
+    })
+    .then((response) => {
+      if (response.exists) {
+        return getExistingUser(bucket, response.githubData.id);
+      } else {
+        return createUser(bucket, response.githubData);
+      }
+    })
+    .then((userProfile) => {
+      let token = jwt.sign(userProfile, event.stageVariables.JWTSecret);
+      let url = `${event.stageVariables.RedirectUrl}?token=${token}`;
+      return http.response.found(callback, url);
+    })
+    .catch((err) => {
+      console.log(err);
+      http.response.error(callback);
+    });
+};
 let getGithubData = (token) => {
   return new Promise((resolve, reject) => {
     let githubOptions = {
@@ -13,14 +47,14 @@ let getGithubData = (token) => {
     };
     let githubUser;
     request('https://api.github.com/user', githubOptions)
-      .then((response) => {
-        githubUser = response;
+      .then((resp) => {
+        githubUser = resp;
         return request('https://api.github.com/user/emails', githubOptions);
       })
-      .then((response) => {
+      .then((resp) => {
         let userEmail;
-        if (response.length > 0) {
-          userEmail = response.find((e) => e.primary).email;
+        if (resp.length > 0) {
+          userEmail = resp.find((e) => e.primary).email;
         }
         resolve({ id: githubUser.id, login: githubUser.login, email: userEmail });
       });
@@ -79,40 +113,4 @@ let getExistingUser = (bucket, githubId) => {
       }
     });
   });
-};
-exports.get = (event, context, callback) => {
-  let bucket = event.stageVariables.BucketName;
-  let tokenRequest = {
-    json: {
-      client_id: event.stageVariables.GithubClientId,
-      client_secret: event.stageVariables.GithubClientSecret,
-      code: event.queryStringParameters.code
-    }
-  };
-  request('https://github.com/login/oauth/access_token', tokenRequest)
-    .then((response) => {
-      return getGithubData(response.access_token);
-    })
-    .then((githubData) => {
-      return userExists(bucket, githubData);
-    })
-    .then((response) => {
-      if (response.exists) {
-        return getExistingUser(bucket, response.githubData.id);
-      } else {
-        return createUser(bucket, response.githubData);
-      }
-    })
-    .then((userProfile) => {
-      let token = jwt.sign(userProfile, event.stageVariables.JWTSecret);
-      let url = `${event.stageVariables.RedirectUrl}?token=${token}`;
-      return callback(null, {
-        statusCode: 302,
-        headers: { location: url }
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-      callback('something went wrong :(');
-    });
 };
