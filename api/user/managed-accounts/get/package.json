@@ -2,6 +2,6 @@
   "version": "1.0.0",
   "name": "user-managed-accounts-get",
   "dependencies": {
-    "aws-api-gateway-utils": "file:../../../../local-packages/api-utils"
+    "api-utils": "file:../../../../local-packages/api-utils"
   }
 }
