@@ -1,16 +1,18 @@
 'use strict';
 const aws = require('aws-sdk');
+const apiUtils = require('aws-api-gateway-utils');
 exports.get = (event, context, callback) => {
   let s3 = new aws.S3();
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
+  let callbacks = new apiUtils.Callbacks(callback);
   s3.listObjectsV2({
     Bucket: bucket,
     Prefix: `users/${userId}/repos`
   }, (err, data) => {
     if (err) {
       console.log(err);
-      callback('something went wrong :(');
+      return callbacks.internalServerError();
     } else {
       let projectPromises = data.Contents.map(c => {
         return new Promise((resolve, reject) => {
@@ -28,17 +30,7 @@ exports.get = (event, context, callback) => {
       });
       Promise.all(projectPromises)
         .then(projects => {
-          console.log({
-            statusCode: 200,
-            body: projects
-          });
-          callback(null, {
-            statusCode: 200,
-            headers: {
-              'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(projects)
-          });
+          return callbacks.ok(projects);
         });
     }
   });

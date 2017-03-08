@@ -1,0 +1,7 @@
+{
+  "version": "1.0.0",
+  "name": "user-repos-get",
+  "dependencies": {
+    "aws-api-gateway-utils": "file:../../../../aws-api-gateway-utils"
+  }
+}
