@@ -13,7 +13,7 @@ exports.get = (event, context, callback) => {
       console.log(err);
       return http.response.error(callback);
     } else {
-      return http.response.ok(callback, JSON.parse(data.Body.toString));
+      return http.response.ok(callback, JSON.parse(data.Body.toString()));
     }
   });
 };
