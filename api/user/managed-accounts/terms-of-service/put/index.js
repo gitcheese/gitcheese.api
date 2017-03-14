@@ -5,9 +5,9 @@ const request = require('request-promise-native');
 exports.put = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
+  let sourceIp = event.requestContext.identity.sourceIp;
   let stripeSecretKey = event.stageVariables.StripeSecretKey;
   let stripeApiUrl = event.stageVariables.StripeApiUrl;
-  let sourceIp = event.identity.sourceIp;
   let managedAccount;
   getManagedAccount(bucket, userId)
     .then((account) => {
