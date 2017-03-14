@@ -7,6 +7,7 @@ const validationRules = {
   tosAcceptanceIp: 'required'
 };
 exports.put = (event, context, callback) => {
+  console.log(event);
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
   let stripeSecretKey = event.stageVariables.StripeSecretKey;
