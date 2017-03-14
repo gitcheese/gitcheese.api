@@ -2,26 +2,17 @@
 const aws = require('aws-sdk');
 const http = require('api-utils').http;
 const request = require('request-promise-native');
-const Validator = require('validatorjs');
-const validationRules = {
-  tosAcceptanceIp: 'required'
-};
 exports.put = (event, context, callback) => {
-  console.log(event);
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
   let stripeSecretKey = event.stageVariables.StripeSecretKey;
   let stripeApiUrl = event.stageVariables.StripeApiUrl;
-  let data = JSON.parse(event.body) || {};
-  var validation = new Validator(data, validationRules);
-  if (validation.fails()) {
-    return http.response.badRequest(callback, validation.errors.all());
-  }
+  let sourceIp = event.identity.sourceIp;
   let managedAccount;
   getManagedAccount(bucket, userId)
     .then((account) => {
       managedAccount = account;
-      return updateTosInfo(stripeApiUrl, stripeSecretKey, managedAccount.id, data);
+      return updateTosInfo(stripeApiUrl, stripeSecretKey, managedAccount.id, sourceIp);
     })
     .then(() => {
       return updateVerificationStatus(bucket, userId, stripeApiUrl, stripeSecretKey, managedAccount);
@@ -48,14 +39,14 @@ let getManagedAccount = (bucket, userId) => {
     });
   });
 };
-let updateTosInfo = (stripeApiUrl, stripeSecretKey, managedAccountId, data) => {
+let updateTosInfo = (stripeApiUrl, stripeSecretKey, managedAccountId, sourceIp) => {
   return new Promise((resolve, reject) => {
     let options = {
       headers: {
         Authorization: `Bearer ${stripeSecretKey}`
       },
       form: {
-        'tos_acceptance[ip]': data.tosAcceptanceIp,
+        'tos_acceptance[ip]': sourceIp,
         'tos_acceptance[date': Math.floor(new Date().getTime() / 1000)
       },
       json: true
