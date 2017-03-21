@@ -1,6 +1,7 @@
 'use strict';
 const aws = require('aws-sdk');
 const request = require('request-promise-native');
+const http = require('api-utils').http;
 const Validator = require('validatorjs');
 const validationRules = {
   token: 'required',
@@ -16,21 +17,18 @@ exports.post = (event, context, callback) => {
   let data = JSON.parse(event.body) || {};
   var validation = new Validator(data, validationRules);
   if (validation.fails()) {
-    return callback(null, {
-      statusCode: 400,
-      body: JSON.stringify({ errors: validation.errors.all() })
-    });
+    return http.response.badRequest(callback, validation.errors.all());
   }
   getManagedAccount(bucket, userId)
     .then((account) => {
       return createStripeCharge(bucket, userId, repoId, account.id, stripeApiUrl, stripeSecretKey, data);
     })
     .then(() => {
-      return callback(null, { statusCode: 200 });
+      return http.response.ok(callback);
     })
     .catch((err) => {
       console.log(err);
-      callback('There was an error');
+      return http.response.error(callback);
     });
 };
 let getManagedAccount = (bucket, userId) => {
