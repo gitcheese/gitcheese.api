@@ -336,7 +336,7 @@
             "Type": "Api",
             "Properties": {
               "Path": "/users/{userId}/repos/{repoId}/donations",
-              "Method": "GET",
+              "Method": "POST",
               "RestApiId": { "Ref": "GitcheeseRestApi" }
             }
           }
