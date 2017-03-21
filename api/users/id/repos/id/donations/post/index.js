@@ -3,8 +3,9 @@ const aws = require('aws-sdk');
 const request = require('request-promise-native');
 const Validator = require('validatorjs');
 const validationRules = {
-  stripeToken: 'required',
-  amount: 'required|numeric|min:200'
+  token: 'required',
+  amount: 'required|numeric|min:200',
+  email: 'required|email'
 };
 exports.post = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
@@ -54,7 +55,7 @@ let createStripeCharge = (bucket, userId, repoId, managedAccountId, stripeApiUrl
       },
       form: {
         amount: data.amount,
-        source: data.stripeToken,
+        source: data.token,
         destination: managedAccountId,
         currency: 'usd'
       }
