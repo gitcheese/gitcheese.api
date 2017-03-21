@@ -2,6 +2,6 @@
   "version": "1.0.0",
   "name": "users-id-repos-id-get",
   "dependencies": {
-    "api-utils": "file:../../../../../local-packages/api-utils"
+    "api-utils": "file:../../../../../../local-packages/api-utils"
   }
 }
