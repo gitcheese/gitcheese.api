@@ -63,7 +63,7 @@ let createStripeCharge = (bucket, userId, repoId, managedAccountId, stripeApiUrl
         let s3 = new aws.S3();
         s3.putObject({
           Bucket: bucket,
-          Key: `users/${userId}/repos/${repoId}/donations/${response.id}/data.json`,
+          Key: `users/${userId}/repos/${repoId}/donations/${response.id}/data.donation.json`,
           Body: JSON.stringify(response)
         }, (err, data) => {
           if (err) {
