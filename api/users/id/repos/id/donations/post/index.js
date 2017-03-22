@@ -56,7 +56,8 @@ let createStripeCharge = (bucket, userId, repoId, managedAccountId, stripeApiUrl
         source: data.token,
         destination: managedAccountId,
         currency: 'usd'
-      }
+      },
+      json: true
     };
     request.post(`${stripeApiUrl}/charges`, options)
       .then((response) => {
