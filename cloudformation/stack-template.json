@@ -362,6 +362,32 @@
           }
         }
       }
+    },
+    "DonationCreatedHandlerFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../async-handlers/donation-created-handler",
+        "Timeout": 300,
+        "Events": {
+          "GetResource": {
+            "Type": "S3",
+            "Properties": {
+              "Bucket": { "Ref": "GitcheeseApiBucket" },
+              "Events": "s3:ObjectCreated:*",
+              "Filter": {
+                "S3Key": {
+                  "Rules": [{
+                    "Name": "suffix",
+                    "Value": "donation.json"
+                  }]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
-}
