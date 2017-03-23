@@ -5,7 +5,7 @@ exports.handler = (event, context, callback) => {
   let bucket = event.Records[0].s3.bucket.name;
   let repoKey = event.Records[0].s3.object.key
     .split('/')
-    .splice(-1, 3)
+    .slice(0, -2)
     .join('/');
   console.log(bucket);
   console.log(repoKey);
