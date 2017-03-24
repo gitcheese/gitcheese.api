@@ -8,14 +8,13 @@ exports.handler = (event, context, callback) => {
     .join('/');
   getAllDonations(bucket, `${repoKey}/donations`)
     .then((donations) => {
-      console.log(donations);
       return Promise.all([
         updateRepoData(bucket, repoKey, donations),
         updateDonationsList(bucket, `${repoKey}/donations`, donations)
       ]);
     })
     .catch((err) => {
-      console.log(err);
+      throw err;
     });
 };
 let updateRepoData = (bucket, prefix, donations) => {
@@ -26,7 +25,7 @@ let updateRepoData = (bucket, prefix, donations) => {
       Key: `${prefix}/data.json`
     }, (err, data) => {
       if (err) {
-        throw err;
+        reject(err);
       } else {
         let repoData = JSON.parse(data.Body.toString());
         repoData.donatedAmount = donations.reduce((sum, donation) => {
@@ -71,7 +70,7 @@ let getAllDonations = (bucket, prefix) => {
       Prefix: prefix
     }, (err, data) => {
       if (err) {
-        throw err;
+        reject(err);
       } else {
         let promises = data.Contents
           .filter(c => c.Key.endsWith('donation.json'))
