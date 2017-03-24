@@ -2,6 +2,36 @@
 const aws = require('aws-sdk');
 const request = require('request-promise-native');
 const response = require('api-utils').response;
+exports.put = (event, context, callback) => {
+  let s3 = new aws.S3();
+  let bucket = event.stageVariables.BucketName;
+  let userId = event.requestContext.authorizer.principalId;
+  let githubLogin = event.requestContext.authorizer.githubLogin;
+  getOwnedRepositories(githubLogin)
+    .then(repos => {
+      s3.listObjectsV2({
+        Bucket: bucket,
+        Prefix: `users/${userId}/repos`
+      }, (err, data) => {
+        if (err) {
+          console.log(err);
+          return response.error(callback);
+        }
+        let reposToAdd = repos.filter(r => {
+          return !data.Contents
+            .find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1);
+        });
+        return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, r)));
+      });
+    })
+    .then((repos) => {
+      return response.ok(callback, repos);
+    })
+    .catch(err => {
+      console.log(err);
+      return response.error(callback);
+    });
+};
 let getOwnedRepositories = (githubLogin) => {
   let githubRequest = {
     headers: {
@@ -50,34 +80,4 @@ let createRepository = (bucket, userId, githubRepo) => {
       }
     });
   });
-};
-exports.put = (event, context, callback) => {
-  let s3 = new aws.S3();
-  let bucket = event.stageVariables.BucketName;
-  let userId = event.requestContext.authorizer.principalId;
-  let githubLogin = event.requestContext.authorizer.githubLogin;
-  getOwnedRepositories(githubLogin)
-    .then(repos => {
-      s3.listObjectsV2({
-        Bucket: bucket,
-        Prefix: `users/${userId}/repos`
-      }, (err, data) => {
-        if (err) {
-          console.log(err);
-          return response.error(callback);
-        }
-        let reposToAdd = repos.filter(r => {
-          return !data.Contents
-            .find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1);
-        });
-        return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, r)));
-      });
-    })
-    .then(() => {
-      return response.ok(callback);
-    })
-    .catch(err => {
-      console.log(err);
-      return response.error(callback);
-    });
 };
