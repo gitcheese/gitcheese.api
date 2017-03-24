@@ -9,10 +9,58 @@ exports.handler = (event, context, callback) => {
   getAllDonations(bucket, `${repoKey}/donations`)
     .then((donations) => {
       console.log(donations);
+      return Promise.all(
+        updateRepoData(bucket, repoKey, donations),
+        updateDonationsList(bucket, `${repoKey}/donations`, donations));
     })
     .catch((err) => {
       console.log(err);
     });
+};
+let updateRepoData = (bucket, prefix, donations) => {
+  return new Promise((resolve, reject) => {
+    let s3 = new aws.S3();
+    s3.getObject({
+      Bucket: bucket,
+      Key: `${prefix}/data.json`
+    }, (err, data) => {
+      if (err) {
+        throw err;
+      } else {
+        let repoData = JSON.parse(data.Body.toString());
+        repoData.donatedAmount = donations.reduce((sum, donation) => {
+          return sum + donation.amount;
+        }, 0);
+        s3.putObject({
+          Bucket: bucket,
+          Key: `${prefix}/data.json`,
+          Body: JSON.stringify(repoData)
+        }, (err, data) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      }
+    });
+  });
+};
+let updateDonationsList = (bucket, prefix, donations) => {
+  return new Promise((resolve, reject) => {
+    let s3 = new aws.S3();
+    s3.putObject({
+      Bucket: bucket,
+      Key: `${prefix}/list.json`,
+      Body: JSON.stringify(donations)
+    }, (err, data) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
 };
 let getAllDonations = (bucket, prefix) => {
   return new Promise((resolve, reject) => {
@@ -24,20 +72,22 @@ let getAllDonations = (bucket, prefix) => {
       if (err) {
         throw err;
       } else {
-        let promises = data.Contents.map(c => {
-          return new Promise((resolve, reject) => {
-            s3.getObject({
-              Bucket: bucket,
-              Key: c.Key
-            }, (err, data) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(JSON.parse(data.Body.toString()));
-              }
+        let promises = data.Contents
+          .filter(c => c.Key.endsWith('donation.json'))
+          .map(c => {
+            return new Promise((resolve, reject) => {
+              s3.getObject({
+                Bucket: bucket,
+                Key: c.Key
+              }, (err, data) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(JSON.parse(data.Body.toString()));
+                }
+              });
             });
           });
-        });
         Promise.all(promises)
           .then(donations => {
             resolve(donations);
