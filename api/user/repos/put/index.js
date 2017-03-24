@@ -1,7 +1,7 @@
 'use strict';
 const aws = require('aws-sdk');
 const request = require('request-promise-native');
-const response = require('api-utils').response;
+const http = require('api-utils').http;
 exports.put = (event, context, callback) => {
   let s3 = new aws.S3();
   let bucket = event.stageVariables.BucketName;
@@ -15,7 +15,7 @@ exports.put = (event, context, callback) => {
       }, (err, data) => {
         if (err) {
           console.log(err);
-          return response.error(callback);
+          return http.response.error(callback);
         }
         let reposToAdd = repos.filter(r => {
           return !data.Contents
@@ -25,11 +25,11 @@ exports.put = (event, context, callback) => {
       });
     })
     .then((repos) => {
-      return response.ok(callback, repos);
+      return http.response.ok(callback, repos);
     })
     .catch(err => {
       console.log(err);
-      return response.error(callback);
+      return http.response.error(callback);
     });
 };
 let getOwnedRepositories = (githubLogin) => {
