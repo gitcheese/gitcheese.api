@@ -25,7 +25,7 @@ exports.put = (event, context, callback) => {
       });
     })
     .then((repos) => {
-      return http.response.ok(callback, repos);
+      return http.response.ok(callback, repos || []);
     })
     .catch(err => {
       console.log(err);
