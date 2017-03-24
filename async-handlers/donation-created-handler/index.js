@@ -9,9 +9,10 @@ exports.handler = (event, context, callback) => {
   getAllDonations(bucket, `${repoKey}/donations`)
     .then((donations) => {
       console.log(donations);
-      return Promise.all(
+      return Promise.all([
         updateRepoData(bucket, repoKey, donations),
-        updateDonationsList(bucket, `${repoKey}/donations`, donations));
+        updateDonationsList(bucket, `${repoKey}/donations`, donations)
+      ]);
     })
     .catch((err) => {
       console.log(err);
