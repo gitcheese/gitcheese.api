@@ -8,6 +8,7 @@ exports.handler = (event, context, callback) => {
     .join('/');
   getAllRepos(bucket, reposKey)
     .then((repos) => {
+      console.log(repos);
       return updateReposList(bucket, reposKey, repos);
     })
     .catch((err) => {
