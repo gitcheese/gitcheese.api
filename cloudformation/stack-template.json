@@ -51,6 +51,7 @@
           "UserReposPutFunctionName": { "Ref": "UserReposPutFunction" },
           "UserReposGetFunctionName": { "Ref": "UserReposGetFunction" },
           "UserReposIdGetFunctionName": { "Ref": "UserReposIdGetFunction" },
+          "UserReposIdDonationsGetFunctionName": { "Ref": "UserReposIdDonationsGetFunction" },
           "UserManagedAccountsGetFunctionName": { "Ref": "UserManagedAccountsGetFunction" },
           "UserManagedAccountsPostFunctionName": { "Ref": "UserManagedAccountsPostFunction" },
           "UserManagedAccountsExternalAccountPutFunctionName": { "Ref": "UserManagedAccountsExternalAccountPutFunction" },
@@ -216,6 +217,26 @@
             "Type": "Api",
             "Properties": {
               "Path": "/user/repos/{id}",
+              "Method": "GET",
+              "RestApiId": { "Ref": "GitcheeseRestApi" }
+            }
+          }
+        }
+      }
+    },
+    "UserReposIdDonationsGetFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.get",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "CodeUri": "./../api/user/repos/id/donations/get",
+        "Timeout": 10,
+        "Events": {
+          "GetResource": {
+            "Type": "Api",
+            "Properties": {
+              "Path": "/user/repos/{id}/donations",
               "Method": "GET",
               "RestApiId": { "Ref": "GitcheeseRestApi" }
             }
