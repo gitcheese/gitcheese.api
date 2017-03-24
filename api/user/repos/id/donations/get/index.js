@@ -10,8 +10,7 @@ exports.get = (event, context, callback) => {
     Key: `users/${event.requestContext.authorizer.principalId}/repos/${id}/donations/list.json`
   }, (err, data) => {
     if (err) {
-      console.log(err);
-      return http.response.error(callback);
+      return http.response.ok(callback, []);
     } else {
       return http.response.ok(callback, JSON.parse(data.Body.toString()));
     }
