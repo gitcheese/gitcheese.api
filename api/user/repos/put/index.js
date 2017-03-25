@@ -20,7 +20,8 @@ exports.put = (event, context, callback) => {
         let promises = repos
           .filter(r => !data.Contents.find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1))
           .map(r => createRepository(bucket, userId, r));
-        console.log(reposToAdd);
+        console.log(repos
+          .filter(r => !data.Contents.find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1)));
         return Promise.all(promises);
       });
     })
