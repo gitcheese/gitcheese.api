@@ -11,7 +11,6 @@ exports.put = (event, context, callback) => {
       return createMissingRepos(bucket, userId, ownedRepos);
     })
     .then((newRepos) => {
-      console.log(newRepos);
       return http.response.ok(callback, newRepos || []);
     })
     .catch(err => {
