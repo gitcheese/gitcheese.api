@@ -3,31 +3,16 @@ const aws = require('aws-sdk');
 const request = require('request-promise-native');
 const http = require('api-utils').http;
 exports.put = (event, context, callback) => {
-  let s3 = new aws.S3();
   let bucket = event.stageVariables.BucketName;
   let userId = event.requestContext.authorizer.principalId;
   let githubLogin = event.requestContext.authorizer.githubLogin;
   getOwnedRepositories(githubLogin)
-    .then(repos => {
-      s3.listObjectsV2({
-        Bucket: bucket,
-        Prefix: `users/${userId}/repos`
-      }, (err, data) => {
-        if (err) {
-          console.log(err);
-          return http.response.error(callback);
-        }
-        let promises = repos
-          .filter(r => !data.Contents.find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1))
-          .map(r => createRepository(bucket, userId, r));
-        console.log(repos
-          .filter(r => !data.Contents.find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1)));
-        return Promise.all(promises);
-      });
+    .then((ownedRepos) => {
+      return createMissingRepos(bucket, userId, ownedRepos);
     })
-    .then((repos) => {
-      console.log(repos);
-      return http.response.ok(callback, repos || []);
+    .then((newRepos) => {
+      console.log(newRepos);
+      return http.response.ok(callback, newRepos || []);
     })
     .catch(err => {
       console.log(err);
@@ -64,8 +49,7 @@ let getOwnedRepositories = (githubLogin) => {
 let createRepository = (bucket, userId, githubRepo) => {
   return new Promise((resolve, reject) => {
     let s3 = new aws.S3();
-    let repo
- = {
+    let repo = {
       id: githubRepo.id,
       name: githubRepo.name,
       fullname: githubRepo.full_name,
@@ -81,6 +65,24 @@ let createRepository = (bucket, userId, githubRepo) => {
       } else {
         resolve(repo);
       }
+    });
+  });
+};
+let createMissingRepos = (bucket, userId, ownedRepos) => {
+  return new Promise((resolve, reject) => {
+    let s3 = new aws.S3();
+    s3.listObjectsV2({
+      Bucket: bucket,
+      Prefix: `users/${userId}/repos`
+    }, (err, data) => {
+      if (err) {
+        return reject(err);
+      }
+      let promises = ownedRepos
+        .filter(r => !data.Contents.find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1))
+        .map(r => createRepository(bucket, userId, r));
+      Promise.all(promises)
+        .then((newRepos) => resolve(newRepos));
     });
   });
 };
