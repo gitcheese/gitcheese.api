@@ -14,7 +14,7 @@ exports.handler = (event, context, callback) => {
       ]);
     })
     .catch((err) => {
-      throw err;
+      throw Error(err);
     });
 };
 let updateRepoData = (bucket, prefix, donations) => {
@@ -22,7 +22,7 @@ let updateRepoData = (bucket, prefix, donations) => {
     let s3 = new aws.S3();
     s3.getObject({
       Bucket: bucket,
-      Key: `${prefix}/data.json`
+      Key: `${prefix}/repo.json`
     }, (err, data) => {
       if (err) {
         reject(err);
@@ -33,7 +33,7 @@ let updateRepoData = (bucket, prefix, donations) => {
         }, 0);
         s3.putObject({
           Bucket: bucket,
-          Key: `${prefix}/data.json`,
+          Key: `${prefix}/repo.json`,
           Body: JSON.stringify(repoData)
         }, (err, data) => {
           if (err) {

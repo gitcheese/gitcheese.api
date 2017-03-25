@@ -11,7 +11,7 @@ exports.handler = (event, context, callback) => {
       return updateReposList(bucket, reposKey, repos);
     })
     .catch((err) => {
-      throw err;
+      throw Error(err);
     });
 };
 let updateReposList = (bucket, prefix, repos) => {
