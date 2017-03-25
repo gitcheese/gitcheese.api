@@ -17,11 +17,11 @@ exports.put = (event, context, callback) => {
           console.log(err);
           return http.response.error(callback);
         }
-        let reposToAdd = repos.filter(r => {
-          return !data.Contents
-            .find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1);
-        });
-        return Promise.all(reposToAdd.map(r => createRepository(bucket, userId, r)));
+        let promises = repos
+          .filter(r => !data.Contents.find(c => c.Key.indexOf(`users/${userId}/repos/${r.id}/`) > -1))
+          .map(r => createRepository(bucket, userId, r));
+        console.log(reposToAdd);
+        return Promise.all(promises);
       });
     })
     .then((repos) => {
@@ -63,7 +63,8 @@ let getOwnedRepositories = (githubLogin) => {
 let createRepository = (bucket, userId, githubRepo) => {
   return new Promise((resolve, reject) => {
     let s3 = new aws.S3();
-    let repo = {
+    let repo
+ = {
       id: githubRepo.id,
       name: githubRepo.name,
       fullname: githubRepo.full_name,
