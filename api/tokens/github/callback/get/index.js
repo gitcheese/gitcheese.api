@@ -28,7 +28,7 @@ exports.get = (event, context, callback) => {
     })
     .then((userProfile) => {
       let token = jwt.sign(userProfile, event.stageVariables.JWTSecret);
-      let url = `${event.stageVariables.RedirectUrl}?token=${token}`;
+      let url = `${event.stageVariables.TokenCallbackUrl}?token=${token}`;
       return http.response.found(callback, url);
     })
     .catch((err) => {
