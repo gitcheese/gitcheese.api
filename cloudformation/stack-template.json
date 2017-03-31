@@ -29,6 +29,9 @@
     },
     "StripeApiUrl": {
       "Type": "String"
+    },
+    "TokenCallbackUrl": {
+      "Type": "String"
     }
   },
   "Resources": {
@@ -65,7 +68,7 @@
           "GithubClientSecret": { "Fn::Sub": "${GithubClientSecret}" },
           "StripeSecretKey": { "Fn::Sub": "${StripeSecretKey}" },
           "StripeApiUrl": { "Fn::Sub": "${StripeApiUrl}" },
-          "RedirectUrl": "http://localhost:8080/app/login/success"
+          "TokenCallbackUrl": { "Fn::Sub": "${TokenCallbackUrl}" }
         }
       }
     },
