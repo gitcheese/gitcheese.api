@@ -94,6 +94,7 @@ let createUser = (bucket, githubData) => {
       if (err) {
         reject(err);
       } else {
+        sendWelcomeEmail(githubData.email);
         resolve(profile);
       }
     });
@@ -112,5 +113,28 @@ let getExistingUser = (bucket, githubId) => {
         resolve(JSON.parse(data.Body.toString()));
       }
     });
+  });
+};
+let sendWelcomeEmail = (email) => {
+  let ses = new aws.SES();
+  let params = {
+    Source: 'cat@gitcheese.com',
+    Destination: {
+      ToAddresses: [email]
+    },
+    Subject: 'Welcome In Gitcheese!',
+    Body: {
+      Message: {
+        Text: {
+          Data: 'Welcome in gitcheese'
+        }
+      }
+    }
+  };
+  ses.sendEmail(params, (err, data) => {
+    if (err) {
+      console.log('Error sending email');
+      console.log(err);
+    }
   });
 };
