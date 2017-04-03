@@ -32,6 +32,8 @@ gulp.task('build-local-packages', () => {
     }))
     .pipe(uglify())
     .pipe(gulp.dest('dist/local-packages/'));
+  gulp.src(['local-packages/**/*.hbs', '!node_modules/**'])
+    .pipe(gulp.dest('dist/local-packages/'));
 });
 gulp.task('build-async-handlers', () => {
   gulp.src('async-handlers/**/package.json')
