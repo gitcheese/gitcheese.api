@@ -25,7 +25,7 @@ let getProfile = (bucket, key) => {
     let s3 = new aws.S3();
     s3.getObject({
       Bucket: bucket,
-      Prefix: key
+      Key: key
     }, (err, data) => {
       if (err) {
         console.log(err);
