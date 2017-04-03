@@ -112,7 +112,7 @@
       "Properties": {
         "Handler": "index.get",
         "Runtime": "nodejs4.3",
-        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess", "AmazonSESFullAccess"],
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
         "CodeUri": "./../api/tokens/github/callback/get",
         "Timeout": 10,
         "Events": {
@@ -433,6 +433,33 @@
                   "Rules": [{
                     "Name": "suffix",
                     "Value": "repo.json"
+                  }]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "UserCreatedHandlerFunction": {
+      "Type": "AWS::Serverless::Function",
+      "Properties": {
+        "Handler": "index.handler",
+        "Runtime": "nodejs4.3",
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess", "AmazonSESFullAccess"],
+        "CodeUri": "./../async-handlers/user-created-handler",
+        "Timeout": 300,
+        "Events": {
+          "RepoCreated": {
+            "Type": "S3",
+            "Properties": {
+              "Bucket": { "Ref": "GitcheeseApiBucket" },
+              "Events": "s3:ObjectCreated:*",
+              "Filter": {
+                "S3Key": {
+                  "Rules": [{
+                    "Name": "suffix",
+                    "Value": "profile.json"
                   }]
                 }
               }

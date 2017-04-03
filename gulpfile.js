@@ -47,4 +47,6 @@ gulp.task('build-async-handlers', () => {
     }))
     .pipe(uglify())
     .pipe(gulp.dest('dist/async-handlers/'));
+  gulp.src(['async-handlers/**/*.hbs', '!node_modules/**'])
+      .pipe(gulp.dest('dist/async-handlers/'));
 });

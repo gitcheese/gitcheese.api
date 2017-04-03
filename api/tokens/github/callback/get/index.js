@@ -2,7 +2,6 @@
 const aws = require('aws-sdk');
 const jwt = require('jsonwebtoken');
 const http = require('api-utils').http;
-const emailTemplates = require('email-templates');
 const request = require('request-promise-native');
 exports.get = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
@@ -95,9 +94,6 @@ let createUser = (bucket, githubData) => {
       if (err) {
         reject(err);
       } else {
-        new emailTemplates.Email('welcome')
-          .compile({})
-          .send(githubData.email, 'Welcome In Gitcheese!');
         resolve(profile);
       }
     });
