@@ -112,7 +112,7 @@
       "Properties": {
         "Handler": "index.get",
         "Runtime": "nodejs4.3",
-        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess", "AmazonSESFullAccess"],
         "CodeUri": "./../api/tokens/github/callback/get",
         "Timeout": 10,
         "Events": {
