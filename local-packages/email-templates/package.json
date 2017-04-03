@@ -1,0 +1,9 @@
+{
+  "name": "email-templates",
+  "version": "1.0.0",
+  "description": "Collection of gitcheese email templates",
+  "main": "index.js",
+  "dependencies": {
+    "handlebars": "^4.0.6"
+  }
+}

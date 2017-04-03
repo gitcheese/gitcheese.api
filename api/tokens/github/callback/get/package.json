@@ -5,6 +5,7 @@
     "jsonwebtoken": "^7.3.0",
     "request": "^2.79.0",
     "request-promise-native": "^1.0.3",
-    "api-utils": "file:../../../../../local-packages/api-utils"
+    "api-utils": "file:../../../../../local-packages/api-utils",
+    "email-templates": "file:../../../../../local-packages/email-templates"
   }
 }
