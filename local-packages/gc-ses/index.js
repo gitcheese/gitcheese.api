@@ -4,6 +4,7 @@ const handlebars = require('handlebars');
 
 exports.sendEmail = function(templateFilename, to, subject, data) {
   return new Promise((resolve, reject) => {
+    console.log('starting sendEmail');
     let source = fs.readFileSync(templateFilename, 'utf8');
     let template = handlebars.compile(source);
     let body = template(data);
@@ -24,6 +25,8 @@ exports.sendEmail = function(templateFilename, to, subject, data) {
         }
       }
     };
+    console.log('sending email with params');
+    console.log(params);
     ses.sendEmail(params, (err, data) => {
       if (err) {
         console.log(err);

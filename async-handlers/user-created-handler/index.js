@@ -10,6 +10,10 @@ exports.handler = (event, context, callback) => {
     .then((profile) => {
       return gcSES.sendEmail('welcome.hbs', profile.email, 'Welcome In Gitcheese!', {});
     })
+    .then((result) => {
+      console.log('email sent');
+      console.log(result);
+    })
     .catch((err) => {
       throw Error(err);
     });
