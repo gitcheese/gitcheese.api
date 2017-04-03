@@ -123,7 +123,9 @@ let sendWelcomeEmail = (email) => {
       ToAddresses: [email]
     },
     Message: {
-      Subject: 'Welcome In Gitcheese!',
+      Subject: {
+        Data: 'Welcome In Gitcheese!'
+      },
       Body: {
         Text: {
           Data: 'Welcome in gitcheese'
