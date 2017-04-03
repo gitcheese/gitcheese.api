@@ -15,10 +15,12 @@ exports.handler = (event, context, callback) => {
       console.log(result);
     })
     .catch((err) => {
-      throw Error(err);
+      throw new Error(err);
     });
 };
 let getProfile = (bucket, key) => {
+  console.log('getting profile');
+  console.log(key);
   return new Promise((resolve, reject) => {
     let s3 = new aws.S3();
     s3.getObject({
@@ -26,8 +28,10 @@ let getProfile = (bucket, key) => {
       Prefix: key
     }, (err, data) => {
       if (err) {
+        console.log(err);
         reject(err);
       } else {
+        console.log(data);
         resolve(JSON.parse(data.Body.toString()));
       }
     });
