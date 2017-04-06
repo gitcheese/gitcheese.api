@@ -27,13 +27,13 @@ let getOwnedRepositories = (githubLogin) => {
   };
   return new Promise((resolve, reject) => {
     let personal;
-    request(`https://api.github.com/users/${githubLogin}/repos`, githubRequest)
+    request(`https://api.github.com/users/${githubLogin}/repos?page=1&per_page=100`, githubRequest)
       .then(response => {
         personal = response.filter((repo) => !repo.fork);
         return request(`https://api.github.com/users/${githubLogin}/orgs`, githubRequest);
       })
       .then(organizations => {
-        let orgRepos = organizations.map((org) => request(`https://api.github.com/orgs/${org.login}/repos`, githubRequest));
+        let orgRepos = organizations.map((org) => request(`https://api.github.com/orgs/${org.login}/repos?page=1&per_page=100`, githubRequest));
         return Promise.all(orgRepos);
       })
       .then(orgRepos => {
