@@ -1,0 +1,6 @@
+{
+  "name": "gc-s3",
+  "version": "1.0.0",
+  "description": "Gitcheese S3 wrapper",
+  "main": "index.js"
+}

@@ -1,5 +1,7 @@
 {
   "version": "1.0.0",
   "name": "donation-created-handler",
-  "dependencies": {}
+  "dependencies": {
+    "gc-ses": "file:../../local-packages/gc-ses"
+  }
 }
