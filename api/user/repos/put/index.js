@@ -90,18 +90,11 @@ let createMissingRepos = (bucket, userId, ownedRepos) => {
   });
 };
 
-let getAllPages = (url, clientId, clientSecret) => {
-  let githubRequest = {
-    headers: {
-      'User-Agent': 'Gitcheese'
-    },
-    json: true
-  };
+let getAllPages = (url, clientId, clientSecret, githubRequest) => {
   let clientQueryParams = `client_id=${clientId}&client_secret=${clientSecret}`;
   return new Promise((resolve, reject) => {
     let recursive = (page, result) => {
-      console.log('Page no:' + page);
-      return request(`${url}?page=${page}&per_page=10&${clientQueryParams}`, githubRequest)
+      return request(`${url}?page=${page}&per_page=100&${clientQueryParams}`, githubRequest)
         .then((response) => {
           if (response.length > 0) {
             return recursive(++page, [...result, ...response]);
