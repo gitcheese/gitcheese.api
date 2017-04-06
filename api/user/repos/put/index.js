@@ -4,9 +4,12 @@ const request = require('request-promise-native');
 const http = require('api-utils').http;
 exports.put = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
+  let clientId = event.stageVariables.GithubClientId;
+  let clientSecret = event.stageVariables.GithubClientSecret;
   let userId = event.requestContext.authorizer.principalId;
   let githubLogin = event.requestContext.authorizer.githubLogin;
-  getOwnedRepositories(githubLogin)
+
+  getOwnedRepositories(githubLogin, clientId, clientSecret)
     .then((ownedRepos) => {
       return createMissingRepos(bucket, userId, ownedRepos);
     })
@@ -18,7 +21,7 @@ exports.put = (event, context, callback) => {
       return http.response.error(callback);
     });
 };
-let getOwnedRepositories = (githubLogin) => {
+let getOwnedRepositories = (githubLogin, clientId, clientSecret) => {
   let githubRequest = {
     headers: {
       'User-Agent': 'Gitcheese'
@@ -27,13 +30,13 @@ let getOwnedRepositories = (githubLogin) => {
   };
   return new Promise((resolve, reject) => {
     let personal;
-    request(`https://api.github.com/users/${githubLogin}/repos?page=1&per_page=100`, githubRequest)
+    getAllPages(`https://api.github.com/users/${githubLogin}/repos`, clientId, clientSecret, githubRequest)
       .then(response => {
         personal = response.filter((repo) => !repo.fork);
         return request(`https://api.github.com/users/${githubLogin}/orgs`, githubRequest);
       })
       .then(organizations => {
-        let orgRepos = organizations.map((org) => request(`https://api.github.com/orgs/${org.login}/repos?page=1&per_page=100`, githubRequest));
+        let orgRepos = organizations.map((org) => getAllPages(`https://api.github.com/orgs/${org.login}/repos`, clientId, clientSecret, githubRequest));
         return Promise.all(orgRepos);
       })
       .then(orgRepos => {
@@ -45,6 +48,7 @@ let getOwnedRepositories = (githubLogin) => {
       });
   });
 };
+
 let createRepository = (bucket, userId, githubRepo) => {
   return new Promise((resolve, reject) => {
     let s3 = new aws.S3();
@@ -83,5 +87,29 @@ let createMissingRepos = (bucket, userId, ownedRepos) => {
       Promise.all(promises)
         .then((newRepos) => resolve(newRepos));
     });
+  });
+};
+
+let getAllPages = (url, clientId, clientSecret) => {
+  let githubRequest = {
+    headers: {
+      'User-Agent': 'Gitcheese'
+    },
+    json: true
+  };
+  let clientQueryParams = `client_id=${clientId}&client_secret=${clientSecret}`;
+  return new Promise((resolve, reject) => {
+    let recursive = (page, result) => {
+      console.log('Page no:' + page);
+      return request(`${url}?page=${page}&per_page=10&${clientQueryParams}`, githubRequest)
+        .then((response) => {
+          if (response.length > 0) {
+            return recursive(++page, [...result, ...response]);
+          } else {
+            resolve(result);
+          }
+        });
+    };
+    return recursive(1, []);
   });
 };
