@@ -8,7 +8,7 @@ exports.handler = (event, context, callback) => {
 
   getProfile(bucket, profileKey)
     .then((profile) => {
-      return gcSES.sendEmail('welcome.hbs', profile.email, 'Welcome In Gitcheese!', {});
+      return gcSES.sendEmail('welcome.hbs', profile.email);
     })
     .catch((err) => {
       throw new Error(err);

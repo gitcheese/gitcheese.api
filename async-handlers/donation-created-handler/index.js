@@ -6,6 +6,10 @@ const gcS3 = require('gc-s3');
 exports.handler = (event, context, callback) => {
   let bucket = event.Records[0].s3.bucket.name;
   let donationKey = event.Records[0].s3.object.key;
+  let repoKey = donationKey.split('/')
+    .slice(0, -3)
+    .join('/')
+    .concat('/repo.json');
   let profileKey = donationKey.split('/')
     .slice(0, -5)
     .join('/')
@@ -18,11 +22,12 @@ exports.handler = (event, context, callback) => {
     ]))
     .then(() => Promise.all([
       gcS3.getJSONObject({Bucket: bucket, Key: donationKey}),
-      gcS3.getJSONObject({Bucket: bucket, Key: profileKey})
+      gcS3.getJSONObject({Bucket: bucket, Key: profileKey}),
+      gcS3.getJSONObject({Bucket: bucket, Key: repoKey})
     ]))
-    .then((donationAndProfile) => Promise.all([
-      sendNewDonationEmail(donationAndProfile[0], donationAndProfile[1]),
-      sendThanksForDonationEmail(donationAndProfile[0])
+    .then((donationProfileRepo) => Promise.all([
+      sendNewDonationEmail(...donationProfileRepo),
+      sendThanksForDonationEmail(...donationProfileRepo)
     ]))
     .catch((err) => {
       throw new Error(err);
@@ -65,13 +70,13 @@ let getDonations = (bucket, donationKey) => {
     Postfix: 'donation.json'});
 };
 
-let sendNewDonationEmail = (donation, profile) => {
-  console.log(donation);
-  console.log(profile);
-  return new Promise((resolve) => resolve());
+let sendNewDonationEmail = (donation, profile, repo) => {
+  return gcSES.sendEmail('new-donation.hbs', profile.email, {
+    repoName: repo.fullname,
+    amount: donation.amount
+  });
 };
 
 let sendThanksForDonationEmail = (donation) => {
-  console.log(donation);
-  return new Promise((resolve) => resolve());
+  return gcSES.sendEmail('thanks-for-donation.hbs', donation.source.name);
 };
