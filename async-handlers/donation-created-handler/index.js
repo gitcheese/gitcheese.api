@@ -1,101 +1,82 @@
 'use strict';
 const aws = require('aws-sdk');
+const gcSES = require('gc-ses');
+const gcS3 = require('gc-s3');
+
 exports.handler = (event, context, callback) => {
   let bucket = event.Records[0].s3.bucket.name;
-  let repoKey = event.Records[0].s3.object.key
-    .split('/')
+  let donationKey = event.Records[0].s3.object.key;
+  let repoKey = donationKey.split('/')
     .slice(0, -3)
-    .join('/');
-  getAllDonations(bucket, `${repoKey}/donations`)
-    .then((donations) => {
-      return Promise.all([
-        updateRepoData(bucket, repoKey, donations),
-        updateDonationsList(bucket, `${repoKey}/donations`, donations)
-      ]);
-    })
+    .join('/')
+    .concat('/repo.json');
+  let profileKey = donationKey.split('/')
+    .slice(0, -5)
+    .join('/')
+    .concat('/profile.json');
+
+  getDonations(bucket, donationKey)
+    .then((donations) => Promise.all([
+      updateRepoData(bucket, donationKey, donations),
+      updateDonationsList(bucket, donationKey, donations)
+    ]))
+    .then(() => Promise.all([
+      gcS3.getJSONObject({Bucket: bucket, Key: donationKey}),
+      gcS3.getJSONObject({Bucket: bucket, Key: profileKey}),
+      gcS3.getJSONObject({Bucket: bucket, Key: repoKey})
+    ]))
+    .then((donationProfileRepo) => Promise.all([
+      sendNewDonationEmail(...donationProfileRepo),
+      sendThanksForDonationEmail(...donationProfileRepo)
+    ]))
     .catch((err) => {
-      throw Error(err);
+      throw new Error(err);
     });
 };
-let updateRepoData = (bucket, prefix, donations) => {
-  return new Promise((resolve, reject) => {
-    let s3 = new aws.S3();
-    s3.getObject({
-      Bucket: bucket,
-      Key: `${prefix}/repo.json`
-    }, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        let repoData = JSON.parse(data.Body.toString());
-        repoData.donatedAmount = donations.reduce((sum, donation) => {
-          return sum + donation.amount;
-        }, 0);
-        s3.putObject({
-          Bucket: bucket,
-          Key: `${prefix}/repo.json`,
-          Body: JSON.stringify(repoData)
-        }, (err, data) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      }
+
+let updateRepoData = (bucket, donationKey, donations) => {
+  let key = donationKey.split('/')
+    .slice(0, -3)
+    .join('/')
+    .concat('/repo.json');
+
+  return gcS3.getJSONObject({Bucket: bucket, Key: key})
+    .then((repo) => {
+      repo.donatedAmount = donations.reduce((sum, donation) => {
+        return sum + donation.amount;
+      }, 0);
+      return gcS3.putJSONObject(repo, {
+        Bucket: bucket,
+        Key: key
+      });
     });
+};
+
+let updateDonationsList = (bucket, donationKey, donations) => {
+  let key = donationKey.split('/')
+    .slice(0, -2)
+    .join('/')
+    .concat('/list.json');
+  return gcS3.putJSONObject(donations, {Bucket: bucket, Key: key});
+};
+
+let getDonations = (bucket, donationKey) => {
+  let prefix = donationKey.split('/')
+    .slice(0, -2)
+    .join('/');
+  return gcS3.getJSONObjects({
+    Bucket: bucket,
+    Prefix: prefix,
+    Postfix: 'donation.json'});
+};
+
+let sendNewDonationEmail = (donation, profile, repo) => {
+  return gcSES.sendEmail('new-donation.hbs', profile.email, {
+    repoName: repo.fullname,
+    amount: donation.amount / 100
   });
 };
-let updateDonationsList = (bucket, prefix, donations) => {
-  return new Promise((resolve, reject) => {
-    let s3 = new aws.S3();
-    s3.putObject({
-      Bucket: bucket,
-      Key: `${prefix}/list.json`,
-      Body: JSON.stringify(donations)
-    }, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
-};
-let getAllDonations = (bucket, prefix) => {
-  return new Promise((resolve, reject) => {
-    let s3 = new aws.S3();
-    s3.listObjectsV2({
-      Bucket: bucket,
-      Prefix: prefix
-    }, (err, data) => {
-      if (err) {
-        reject(err);
-      } else {
-        let promises = data.Contents
-          .filter(c => c.Key.endsWith('donation.json'))
-          .map(c => {
-            return new Promise((resolve, reject) => {
-              s3.getObject({
-                Bucket: bucket,
-                Key: c.Key
-              }, (err, data) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  resolve(JSON.parse(data.Body.toString()));
-                }
-              });
-            });
-          });
-        Promise.all(promises)
-          .then(donations => {
-            resolve(donations);
-          })
-          .catch((err) => {
-            reject(err);
-          });
-      }
-    });
-  });
+
+let sendThanksForDonationEmail = (donation) => {
+  return gcSES.sendEmail('thanks-for-donation.hbs', donation.source.name);
 };
