@@ -73,7 +73,7 @@ let getDonations = (bucket, donationKey) => {
 let sendNewDonationEmail = (donation, profile, repo) => {
   return gcSES.sendEmail('new-donation.hbs', profile.email, {
     repoName: repo.fullname,
-    amount: donation.amount
+    amount: donation.amount / 100
   });
 };
 
