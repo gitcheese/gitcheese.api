@@ -1,6 +1,6 @@
 const aws = require('aws-sdk');
 
-let getJSONObject = function(options) {
+let getJSONObject = (options) => {
   return new Promise((resolve, reject) => {
     let s3 = new aws.S3();
     s3.getObject(options, (err, data) => {
@@ -13,7 +13,7 @@ let getJSONObject = function(options) {
   });
 };
 
-let getJSONObjects = function(options) {
+let getJSONObjects = (options) => {
   return new Promise((resolve, reject) => {
     let s3 = new aws.S3();
     s3.listObjectsV2({
@@ -49,8 +49,6 @@ let putJSONObject = (object, options) => {
   });
 };
 
-exports = {
-  getJSONObject: getJSONObject,
-  getJSONObjects: getJSONObjects,
-  putJSONObject: putJSONObject
-};
+exports.getJSONObject = getJSONObject;
+exports.getJSONObjects = getJSONObjects;
+exports.putJSONObject = putJSONObject;
