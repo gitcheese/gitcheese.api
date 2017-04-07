@@ -392,7 +392,7 @@
       "Properties": {
         "Handler": "index.handler",
         "Runtime": "nodejs4.3",
-        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess"],
+        "Policies": ["AWSLambdaBasicExecutionRole", "AmazonS3FullAccess", "AmazonSESFullAccess"],
         "CodeUri": "./../async-handlers/donation-created-handler",
         "Timeout": 300,
         "Events": {
