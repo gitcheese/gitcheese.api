@@ -10,7 +10,6 @@ const validationRules = {
 };
 exports.post = (event, context, callback) => {
   let bucket = event.stageVariables.BucketName;
-  let stripeSecretKey = event.stageVariables.StripeSecretKey;
   let stripeApiUrl = event.stageVariables.StripeApiUrl;
   let userId = event.pathParameters.userId;
   let repoId = event.pathParameters.repoId;
@@ -21,7 +20,8 @@ exports.post = (event, context, callback) => {
   }
   getManagedAccount(bucket, userId)
     .then((account) => {
-      return createStripeCharge(bucket, userId, repoId, account.id, stripeApiUrl, stripeSecretKey, data);
+      return createStripeCharge(bucket, userId, repoId,
+        account.id, stripeApiUrl, account.keys.secret, data);
     })
     .then(() => {
       return http.response.ok(callback);
