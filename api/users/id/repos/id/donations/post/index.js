@@ -54,7 +54,6 @@ let createStripeCharge = (bucket, userId, repoId, managedAccountId, stripeApiUrl
       form: {
         amount: data.amount,
         source: data.token,
-        destination: managedAccountId,
         currency: 'usd'
       },
       json: true
