@@ -10,6 +10,10 @@ exports.handler = (event, context, callback) => {
     .slice(0, -3)
     .join('/')
     .concat('/repo.json');
+  let accountKey = donationKey.split('/')
+    .slice(0, -5)
+    .join('/')
+    .concat('/managed-account/data.json');
   let profileKey = donationKey.split('/')
     .slice(0, -5)
     .join('/')
@@ -23,11 +27,12 @@ exports.handler = (event, context, callback) => {
     .then(() => Promise.all([
       gcS3.getJSONObject({Bucket: bucket, Key: donationKey}),
       gcS3.getJSONObject({Bucket: bucket, Key: profileKey}),
-      gcS3.getJSONObject({Bucket: bucket, Key: repoKey})
+      gcS3.getJSONObject({Bucket: bucket, Key: repoKey}),
+      gcS3.getJSONObject({Bucket: bucket, Key: accountKey})
     ]))
-    .then((donationProfileRepo) => Promise.all([
-      sendNewDonationEmail(...donationProfileRepo),
-      sendThanksForDonationEmail(...donationProfileRepo)
+    .then((donationProfileRepoAccount) => Promise.all([
+      sendNewDonationEmail(...donationProfileRepoAccount),
+      sendThanksForDonationEmail(...donationProfileRepoAccount)
     ]))
     .catch((err) => {
       throw new Error(err);
@@ -70,10 +75,11 @@ let getDonations = (bucket, donationKey) => {
     Postfix: 'donation.json'});
 };
 
-let sendNewDonationEmail = (donation, profile, repo) => {
+let sendNewDonationEmail = (donation, profile, repo, account) => {
   return gcSES.sendEmail('new-donation.hbs', profile.email, {
     repoName: repo.fullname,
-    amount: donation.amount / 100
+    amount: donation.amount / 100,
+    account: account
   });
 };
 
