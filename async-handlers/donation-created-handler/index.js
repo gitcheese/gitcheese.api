@@ -1,5 +1,4 @@
 'use strict';
-const aws = require('aws-sdk');
 const gcSES = require('gc-ses');
 const gcS3 = require('gc-s3');
 
