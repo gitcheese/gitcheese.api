@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "7"
 before_install:
-  - pip install --user awscli
+  - pip install --user 'awscli==1.11.79'
   - export PATH=$PATH:$HOME/.local/bin
 install:
   - npm install
