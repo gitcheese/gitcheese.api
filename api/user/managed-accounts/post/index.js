@@ -32,8 +32,8 @@ exports.post = (event, context, callback) => {
     });
 };
 let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, country) => {
+  let interval = country !== 'JP' ? 'daily' : 'weekly';
   return new Promise((resolve, reject) => {
-    console.log('creating managed account');
     let options = {
       headers: {
         Authorization: `Bearer ${stripeSecretKey}`
@@ -42,7 +42,7 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
         'managed': true,
         'country': country,
         'transfer_schedule[delay_days]': 30,
-        'transfer_schedule[interval]': 'daily'
+        'transfer_schedule[interval]': interval
       },
       json: true
     };
