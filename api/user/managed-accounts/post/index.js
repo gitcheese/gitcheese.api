@@ -32,7 +32,6 @@ exports.post = (event, context, callback) => {
     });
 };
 let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, country) => {
-  let interval = country !== 'JP' ? 'daily' : 'weekly';
   return new Promise((resolve, reject) => {
     let options = {
       headers: {
@@ -42,10 +41,14 @@ let createManagedAccount = (stripeApiUrl, stripeSecretKey, bucket, userId, count
         'managed': true,
         'country': country,
         'transfer_schedule[delay_days]': 30,
-        'transfer_schedule[interval]': interval
+        'transfer_schedule[interval]': 'daily'
       },
       json: true
     };
+    if (country === 'JP') {
+      options.form['transfer_schedule[interval]'] = 'weekly';
+      options.form['transfer_schedule[weekly_anchor]'] = 'monday';
+    }
     request.post(`${stripeApiUrl}/accounts`, options)
       .then((response) => {
         let s3 = new aws.S3();
