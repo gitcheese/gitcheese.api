@@ -8,5 +8,6 @@ install:
   - npm install
 script:
   - npm run build
+  - find ./dist/ -type f -exec touch -t 201601011200 '{}' \;
   - npm run package-template
   - npm run deploy-$TRAVIS_BRANCH
